@@ -1,9 +1,11 @@
-package dongkyul.pospot;
+package dongkyul.pospot.view.main;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import dongkyul.pospot.R;
+import dongkyul.pospot.view.common.BaseActivity;
+
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
