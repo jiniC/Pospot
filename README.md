@@ -1,2 +1,2 @@
 # Pospot
-## Pose + posting + spot
+Pose + posting + spot
