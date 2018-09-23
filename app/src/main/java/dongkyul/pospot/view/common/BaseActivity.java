@@ -7,7 +7,6 @@ import android.view.View;
 
 import dongkyul.pospot.utils.SessionUtils;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 public class BaseActivity extends Activity implements View.OnClickListener {
     protected String token;
@@ -22,11 +21,13 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         token = SessionUtils.getString(this, SessionUtils.TOKEN,SessionUtils.TEST_TOKEN);
 //        ContextUtils.setStatusColor(this, getWindow(), R.color.dark);
+        /*
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .name("pospotDB")
                 .deleteRealmIfMigrationNeeded()
                 .build();
-        realm = Realm.getInstance(config);
+                */
+        //realm = Realm.getInstance(config);
     }
 
     public void init(){
