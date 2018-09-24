@@ -16,10 +16,19 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         Button btnInstaImage = (Button) findViewById(R.id.btnInstaImage);
+        Button btnMain = (Button) findViewById(R.id.btnMain);
+
         btnInstaImage.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), InstaImageActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnMain.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainMapActivity.class);
                 startActivity(intent);
             }
         });
