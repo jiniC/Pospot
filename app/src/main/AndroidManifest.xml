@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.main.FilterListActivity"></activity>
+        <activity android:name=".view.main.InstaImageActivity"></activity>
     </application>
 
 </manifest>
