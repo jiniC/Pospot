@@ -83,9 +83,8 @@ public class Crawler {
         public void run() {
            try {
                images = new ArrayList<>();
-               for(String imageLink:mLinks) {
-                   //Log.e("s",imageLink);
-                   URL url = new URL(imageLink);
+               for(int i=0;i<8;i++) {
+                   URL url = new URL(mLinks.get(i));
                    InputStream is = url.openStream();
                    images.add(BitmapFactory.decodeStream(is));
                }
