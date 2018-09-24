@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import dongkyul.pospot.view.main.InstaImageCallBack;
@@ -25,13 +26,15 @@ public class Crawler {
     public List<String> imgLinks;
     public WebView webView;
     public InstaImageCallBack imageCallback;
+    public Context mContext;
 
-    public Crawler(Context context){
-        webView = new WebView(context);
+    public Crawler(WebView wv){
+        webView = wv;
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                webView.clearCache(true);
                 view.loadUrl("javascript:window.Android.getHtml(document.getElementsByTagName('html')[0].innerHTML);");
             }
         });
@@ -43,10 +46,9 @@ public class Crawler {
     }
 
     public void getImages(String tag,InstaImageCallBack callBack){
-        Log.e("s","getImages");
         imageCallback = callBack;
+        imgLinks = new ArrayList<>();
         webView.addJavascriptInterface(new getImageInterface(), "Android");
-        Log.e("crawling","renderTest");
         try {
             webView.loadUrl(makeURL(tag));
         }
@@ -58,21 +60,15 @@ public class Crawler {
 
     public class getImageInterface {
         @JavascriptInterface
-        public void getHtml(String html) { //위 자바스크립트가 호출되면 여기로 html이 반환됨
-            Log.e("s","getHTML");
+        public void getHtml(String html) {
             Document doc = Jsoup.parse(html);
             Elements imgs = doc.getElementsByTag("img");
-            Log.e("s","hiL");
-            Log.e("s",Integer.toString(imgs.size()));
             for(Element img:imgs) {
-                Log.e("s",img.attr("img"));
-                Log.e("s","L");
-                imgLinks.add(img.attr("img"));
+                imgLinks.add(img.attr("src"));
             }
-            Log.e("s","G");
-            Log.e("s",html);
             SetImageThread thread = new SetImageThread(imgLinks,imageCallback);
             thread.start();
+
         }
     }
 
@@ -86,13 +82,17 @@ public class Crawler {
         }
         public void run() {
            try {
+               images = new ArrayList<>();
                for(String imageLink:mLinks) {
-                   Log.e("s",imageLink);
+                   //Log.e("s",imageLink);
                    URL url = new URL(imageLink);
                    InputStream is = url.openStream();
                    images.add(BitmapFactory.decodeStream(is));
                }
-               mCallBack.loadImages(images);
+               if(images.size()>0)
+                   mCallBack.loadImages(images);
+               else
+                   Log.e("i","# of images 0");
            } catch (Exception e) {
                Log.e("s", e.toString());
            }
