@@ -18,9 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.main.FilterListActivity"></activity>
-        <activity android:name=".view.main.InstaImageActivity"></activity>
-        <activity android:name=".view.main.MainMapActivity"></activity>
+        <activity android:name=".view.main.FilterListActivity" />
+        <activity android:name=".view.main.CrawlingApiTestActivity" />
+        <activity android:name=".view.main.MainMapActivity" />
+        <activity android:name=".view.main.TagRankActivity"></activity>
     </application>
 
 </manifest>

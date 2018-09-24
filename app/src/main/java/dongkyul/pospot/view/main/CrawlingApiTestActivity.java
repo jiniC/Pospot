@@ -6,10 +6,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+
 import dongkyul.pospot.R;
 import dongkyul.pospot.view.common.BaseActivity;
 
-public class InstaImageActivity extends BaseActivity {
+public class CrawlingApiTestActivity extends BaseActivity {
 
     EditText editText;
     @Override
@@ -25,6 +27,8 @@ public class InstaImageActivity extends BaseActivity {
         editText = (EditText)findViewById(R.id.filterSearch);
         Button filterSearchButton = (Button)findViewById(R.id.filterSearchButton);
         filterSearchButton.setOnClickListener(this);
+        Button orderTagButton = (Button)findViewById(R.id.order_tag);
+        orderTagButton.setOnClickListener(this);
     }
 
     @Override
@@ -32,9 +36,21 @@ public class InstaImageActivity extends BaseActivity {
         super.onClick(v);
         switch (v.getId()){
             case R.id.filterSearchButton:
-                Intent intent = new Intent(InstaImageActivity.this,FilterListActivity.class);
+                Intent intent = new Intent(CrawlingApiTestActivity.this,FilterListActivity.class);
                 intent.putExtra("tag",editText.getText().toString());
                 startActivity(intent);
+                break;
+            case R.id.order_tag:
+                Intent i = new Intent(CrawlingApiTestActivity.this,TagRankActivity.class);
+                ArrayList<String> tagList = new ArrayList<>();
+                tagList.add("경복궁");
+                tagList.add("인사동");
+                tagList.add("창경궁");
+                tagList.add("익선동");
+                tagList.add("한강");
+                tagList.add("광화문");
+                i.putStringArrayListExtra("tagList",tagList);
+                startActivity(i);
                 break;
         }
     }

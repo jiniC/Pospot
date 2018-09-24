@@ -1,6 +1,5 @@
 package dongkyul.pospot.utils;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -16,9 +15,12 @@ import org.jsoup.select.Elements;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dongkyul.pospot.view.main.InstaImageCallBack;
+import dongkyul.pospot.view.main.TagNumCallBack;
 
 public class Crawler {
 
@@ -26,7 +28,9 @@ public class Crawler {
     public List<String> imgLinks;
     public WebView webView;
     public InstaImageCallBack imageCallback;
-    public Context mContext;
+    public TagNumCallBack tagNumCallBack;
+    public Map<String,Integer> tagList;
+    public String targetTag;
 
     public Crawler(WebView wv){
         webView = wv;
@@ -53,10 +57,24 @@ public class Crawler {
             webView.loadUrl(makeURL(tag));
         }
         catch (Exception e){
-            Log.e("crawling","loadURL error");
+            Log.e("loadURL error",e.toString());
         }
     }
 
+    public void getNumTags(List<String> tags, TagNumCallBack callBack){
+        tagNumCallBack=callBack;
+        tagList = new HashMap<>();
+        webView.addJavascriptInterface(new getTagNumInterface(), "Android");
+        try {
+            for (String tag : tags) {
+                targetTag=tag;
+                webView.loadUrl(makeURL(tag));
+            }
+        }
+        catch (Exception e){
+            Log.e("crawling",e.toString());
+        }
+    }
 
     public class getImageInterface {
         @JavascriptInterface
@@ -69,6 +87,19 @@ public class Crawler {
             SetImageThread thread = new SetImageThread(imgLinks,imageCallback);
             thread.start();
 
+        }
+    }
+
+    public class getTagNumInterface{
+        @JavascriptInterface
+        public void getHtml(String html) {
+            Document doc = Jsoup.parse(html);
+            Elements tagNum = doc.select(".g47SY");
+            int num = Integer.parseInt(tagNum.get(0).toString().replaceAll(",", ""));
+            tagList.put(targetTag,num);
+            Log.e("targetTag",targetTag);
+            Log.e("num",Integer.toString(num));
+            tagNumCallBack.loadTagNum(tagList);
         }
     }
 

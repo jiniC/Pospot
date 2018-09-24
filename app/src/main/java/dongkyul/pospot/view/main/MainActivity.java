@@ -21,14 +21,14 @@ public class MainActivity extends BaseActivity {
         btnInstaImage.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), InstaImageActivity.class);
+                Intent intent = new Intent(MainActivity.this, CrawlingApiTestActivity.class);
                 startActivity(intent);
             }
         });
         btnMain.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainMapActivity.class);
+                Intent intent = new Intent(MainActivity.this, MainMapActivity.class);
                 startActivity(intent);
             }
         });

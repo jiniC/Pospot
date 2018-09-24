@@ -1,5 +1,6 @@
 package dongkyul.pospot.view.main;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.webkit.WebView;
@@ -15,6 +16,7 @@ import dongkyul.pospot.view.common.BaseActivity;
 
 public class FilterListActivity extends BaseActivity {
 
+    public ProgressDialog mProgressDialog;
     List<ImageView> imageViews;
     WebView webView;
     String tag;
@@ -58,11 +60,28 @@ public class FilterListActivity extends BaseActivity {
                             view.setImageBitmap(images.get(i));
                             i++;
                         }
+                        hideProgressDialog();
                     }
                 });
             }
         };
+        showProgressDialog();
         c.getImages(tag,imageCallback);
+    }
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("받아오는 중");
+            mProgressDialog.setIndeterminate(true);
+        }
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
     @Override
