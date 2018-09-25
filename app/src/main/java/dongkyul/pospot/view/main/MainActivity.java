@@ -17,6 +17,7 @@ public class MainActivity extends BaseActivity {
 
         Button btnInstaImage = (Button) findViewById(R.id.btnInstaImage);
         Button btnMain = (Button) findViewById(R.id.btnMain);
+        Button btnTourAPI = (Button) findViewById(R.id.btnTourAPI);
 
         btnInstaImage.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -29,6 +30,13 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MainMapActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnTourAPI.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TourApiActivity.class);
                 startActivity(intent);
             }
         });
