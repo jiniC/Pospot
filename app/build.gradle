@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.16.18'
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     annotationProcessor 'org.projectlombok:lombok:1.16.18'
     implementation 'gun0912.ted:tedpermission:2.1.0'
