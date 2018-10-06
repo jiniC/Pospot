@@ -5,41 +5,45 @@ import java.util.List;
 import lombok.Data;
 
 public class ResponseContainer {
-    Items items;
+    Response response;
+    public class Response {
+        Body body;
+        Header header;
 
-    public class Items {
-        List<Item> itemList;
+        public class Body {
 
-        @Data
-        public class Item {
-            public int contenttypeid;
-            public double mapx;
-            public double mapy;
-            public String title;
+            Items items;
 
+            public class Items {
+                List<Item> item;
 
-
-            public String addr1;
-            public String addr2;
-            public int areacode;
-
-            public int booktour;
-
-            public String cat1;
-            public String cat2;
-            public String cat3;
-            public int contentid;
-            public int createdtime;
-            public int dist;
-            public String firstimage;
-            public String firstimage2;
-            public int mlevel;
-            public int modifiedtime;
-            public int readcount;
-            public String tel;
+                @Data
+                public class Item {
+                    public int contenttypeid;
+                    public double mapx;
+                    public double mapy;
+                    public String title;
 
 
+                    public String addr1;
+                    public String addr2;
+                    public int areacode;
 
+                    public int booktour;
+
+                    public String cat1;
+                    public String cat2;
+                    public String cat3;
+                    public int contentid;
+                    public int createdtime;
+                    public int dist;
+                    public String firstimage;
+                    public String firstimage2;
+                    public int mlevel;
+                    public int modifiedtime;
+                    public int readcount;
+                    public int sigungucode;
+                    public String tel;
 
 
 //"addr1":"서울특별시 중구 명동8가길 32",
@@ -62,6 +66,13 @@ public class ResponseContainer {
 //        "sigungucode": 24,
 //        "tel": "02-753-6372",
 //        "title": "가나 안경원 (명
+                }
+            }
+        }
+
+        public class Header {
+            int resultCode;
+            String resultMsg;
         }
     }
 }
