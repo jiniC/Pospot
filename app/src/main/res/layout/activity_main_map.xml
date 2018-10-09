@@ -7,6 +7,25 @@
     android:layout_height="match_parent">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_weight="1"
+        tools:layout_editor_absoluteX="70dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tourapi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tourapi data . . ." />
+        </LinearLayout>
+    </ScrollView>
+
     <com.skt.Tmap.TMapView
         android:id="@+id/tmapView"
         android:layout_width="397dp"
