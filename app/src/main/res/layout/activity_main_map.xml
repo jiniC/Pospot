@@ -6,47 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_weight="1"
-        tools:layout_editor_absoluteX="70dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/tourapi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="tourapi data . . ." />
-        </LinearLayout>
-    </ScrollView>
-
-    <com.skt.Tmap.TMapView
-        android:id="@+id/tmapView"
-        android:layout_width="397dp"
-        android:layout_height="455dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
-    </com.skt.Tmap.TMapView>
-
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="53dp"
         android:orientation="horizontal"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp">
 
         <Button
             android:id="@+id/btnSet"
@@ -87,6 +53,15 @@
             tools:layout_editor_absoluteY="0dp" />
 
     </LinearLayout>
+
+    <com.skt.Tmap.TMapView
+        android:id="@+id/tmapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="53dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"></com.skt.Tmap.TMapView>
 
 
 </android.support.constraint.ConstraintLayout>

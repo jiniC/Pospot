@@ -2,9 +2,11 @@ package dongkyul.pospot.view.main;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,7 +41,6 @@ public class MainMapActivity extends BaseActivity {
     public Button btnSet;
 
     private static int mMarkerID;
-   // private ArrayList<TMapPoint> m_tmapPoint = new ArrayList<TMapPoint>();
     private ArrayList<String> mArrayMarkerID = new ArrayList<String>();
     private ArrayList<MapPoint> m_mapPoint = new ArrayList<MapPoint>();
 
@@ -65,42 +66,6 @@ public class MainMapActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
         init();
-
-        btnSet.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                if (!isPermission) {
-                    callPermission();
-                    return;
-                }
-
-                gps = new GpsInfo(MainMapActivity.this);
-                if (gps.isGetLocation()) {
-
-                    double latitude = gps.getLatitude();
-                    double longitude = gps.getLongitude();
-
-                    // to-be
-                    // 위치 못 찾았을 때 (0.0, 0.0) 임시로 서울 시청 위치 넣어두고
-                    // 토스트창으로 위치 확인이 안되서 임시 데이터로 했다는 토스트 노출하기
-
-                    Toast.makeText(
-                            getApplicationContext(),
-                            "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
-                            Toast.LENGTH_LONG).show();
-
-                    tMapView.setLocationPoint(longitude,latitude);
-                    tMapView.setCenterPoint(longitude,latitude);
-
-                    getTourData(longitude,latitude);
-                } else {
-                    gps.showSettingsAlert();
-                }
-
-
-            }
-        });
-
-        callPermission();
     }
 
     @Override
@@ -111,6 +76,74 @@ public class MainMapActivity extends BaseActivity {
         btnSet = (Button) findViewById(R.id.btnSet);
         tourapi = (TextView) findViewById(R.id.tourapi);
         addMapView();
+        callPermission();
+        loadPosition();
+
+        // getZoomLevel
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int previousZoomlevel=tMapView.getZoomLevel();
+                int nowZoomlevel;
+                double previousPosition = tMapView.getCenterPointX();
+                double nowPosition = tMapView.getCenterPointX();
+                while(true){
+                    try {
+                        Thread.sleep(1000);
+                        nowZoomlevel = tMapView.getZoomLevel();
+                        if(previousZoomlevel!=nowZoomlevel||previousPosition!=nowPosition){
+                            Thread.sleep(1000);
+                            if(previousZoomlevel==nowZoomlevel&&previousPosition==nowPosition) {
+                                // to-be
+                                // 줌 레벨에 따라 세 단계 정도로 나눠서 데이터 받아오기 & 위치 변경에 따라서만 데이터 받아오기
+                            }
+                        }
+                    }
+
+                    catch(Exception e){
+
+                    }
+                }
+            }
+        });
+    }
+
+    public void loadPosition(){
+        if (!isPermission) {
+            callPermission();
+            return;
+        }
+
+        try {
+            gps = new GpsInfo(MainMapActivity.this);
+
+            if (gps.isGetLocation()) {
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+
+                // to-be
+                // 위치 못 찾았을 때 (0.0, 0.0) 임시로 서울 시청 위치 넣어두기?
+                // 다시찾기버튼 이랑 기본위치로보기 버튼? -> 이걸로
+                if(latitude!=0.0&&longitude!=0.0) {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
+                            Toast.LENGTH_LONG).show();
+                    tMapView.setLocationPoint(longitude, latitude);
+                    tMapView.setCenterPoint(longitude, latitude);
+
+                    getTourData(longitude, latitude);
+                } else {
+                    Toast.makeText(this,"위치를 찾을 수 없습니다.",Toast.LENGTH_LONG);
+                }
+            } else {
+                gps.showSettingsAlert();
+            }
+        } catch(Exception e){
+            Toast.makeText(this,"위치 찾기 에러",Toast.LENGTH_LONG);
+            Log.e("S","Error 받기");
+        }
+
     }
 
     private void addMapView() {
@@ -123,6 +156,29 @@ public class MainMapActivity extends BaseActivity {
         tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
         tMapView.setTrackingMode(true);
         tMapView.setSightVisible(true);
+
+        tMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback() {
+            @Override
+            public boolean onPressEvent(ArrayList arrayList, ArrayList arrayList1, TMapPoint tMapPoint, PointF pointF) {
+                // to-be
+                // 클릭된 마커 객체 데이터 가져와야 함
+//                Toast.makeText(
+//                        getApplicationContext(),
+//                        "마커가 클릭됬습니다!\n"+MapPoint.getName(),
+//                        Toast.LENGTH_LONG).show();
+//
+//                Intent intent = new Intent(MainMapActivity.this, CrawlingApiTestActivity.class);
+//                intent.putExtra("markerName",MapPoint.getName());
+//
+//                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onPressUpEvent(ArrayList arrayList, ArrayList arrayList1, TMapPoint tMapPoint, PointF pointF) {
+                return false;
+            }
+        });
     }
 
     public void showMarkerPoint() {
@@ -134,28 +190,28 @@ public class MainMapActivity extends BaseActivity {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon);
             switch (contenttypeid) {
                 case 12:
-                    System.out.println("관광지");
+                    //System.out.println("관광지");
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_12);
                     break;
                 case 14:
-                    System.out.println("문화시설");
+                    //System.out.println("문화시설");
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_14);
                     break;
                 case 15:
-                    System.out.println("축제/공연/행사");
+                    //System.out.println("축제/공연/행사");
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_15);
                     break;
                 case 25:
-                    System.out.println("여행코스");
+                    //System.out.println("여행코스");
                     break;
                 case 28:
-                    System.out.println("레포츠");
+                    //System.out.println("레포츠");
                     break;
                 case 32:
-                    System.out.println("숙박");
+                    //System.out.println("숙박");
                     break;
                 case 38:
-                    System.out.println("쇼핑");
+                    //System.out.println("쇼핑");
                     break;
                 case 39:
                     System.out.println("음식");
@@ -165,8 +221,8 @@ public class MainMapActivity extends BaseActivity {
                     System.out.println("기본");
                     break;
             }
-            item1.setIcon(bitmap); // 마커 아이콘 지정
-            item1.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
+            item1.setIcon(bitmap);
+            item1.setPosition(0.5f, 1.0f);
             item1.setTMapPoint(point);
             item1.setName(m_mapPoint.get(i).getName());
             item1.setVisible(item1.VISIBLE);
@@ -183,7 +239,7 @@ public class MainMapActivity extends BaseActivity {
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
 //        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000000, 10000,'Y', 'A', "AND", "pospot","json");
-        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,5000, 1000,'Y', 'A', "AND", "pospot","json");
+        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000, 1000,'Y', 'A', "AND", "pospot","json");
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -203,7 +259,6 @@ public class MainMapActivity extends BaseActivity {
                         m_mapPoint.add(new MapPoint(tourItemTitle, tourItemContenttypeid, tourItemMapLat, tourItemMapLon));
                     }
                     showMarkerPoint();
-                    tourapi.setText(result);
                 }
             }
 
@@ -244,6 +299,14 @@ public class MainMapActivity extends BaseActivity {
                             PERMISSIONS_ACCESS_COARSE_LOCATION);
         } else {
             isPermission = true;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()){
+
         }
     }
 }

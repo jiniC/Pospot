@@ -2,6 +2,7 @@ package dongkyul.pospot.view.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,11 +14,14 @@ import dongkyul.pospot.view.common.BaseActivity;
 
 public class CrawlingApiTestActivity extends BaseActivity {
 
+    String searchItem;
     EditText editText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
+
     }
 
     @Override
@@ -25,6 +29,12 @@ public class CrawlingApiTestActivity extends BaseActivity {
         super.init();
         setContentView(R.layout.activity_insta_image);
         editText = (EditText)findViewById(R.id.filterSearch);
+        // to-be
+        // MainMapActivity에서 클릭된 마커 객체 데이터 가져와야 함
+//        Intent intent = getIntent();
+//        Bundle extras = intent.getExtras();
+//        String searchItem = extras.getString("markerName");
+//        editText.setText(searchItem);
         Button filterSearchButton = (Button)findViewById(R.id.filterSearchButton);
         filterSearchButton.setOnClickListener(this);
         Button orderTagButton = (Button)findViewById(R.id.order_tag);
