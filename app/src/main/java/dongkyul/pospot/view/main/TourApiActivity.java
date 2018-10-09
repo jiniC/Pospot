@@ -1,17 +1,12 @@
 package dongkyul.pospot.view.main;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,15 +14,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Properties;
 
 import dongkyul.pospot.R;
 import dongkyul.pospot.view.common.BaseActivity;
@@ -36,17 +24,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
+// X축 = LONGTITUDE = 경도 / Y축 = LATITUDE = 위도 (보통의 경우)
 public class TourApiActivity extends BaseActivity {
-    LocationManager locationManager;
     TextView tourapi;
-    double mapX;
-    double mapY;
+    double mapLon;
+    double mapLat;
     int tourItemContenttypeid;
-    double tourItemMapx;
-    double tourItemMapy;
+    double tourItemMapLat;
+    double tourItemMapLon;
     String tourItemTitle;
     String result = "\n";
 
@@ -67,9 +53,6 @@ public class TourApiActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tour_api);
         initView();
-        mapX = 126.981611;
-        mapY = 37.568477;
-        getTourData(mapX,mapY);
 
         // GPS 정보를 보여주기 위한 이벤트 클래스 등록
         btnShowLocation.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +77,8 @@ public class TourApiActivity extends BaseActivity {
                             getApplicationContext(),
                             "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
                             Toast.LENGTH_LONG).show();
+
+                    getTourData(longitude,latitude);
                 } else {
                     // GPS 를 사용할수 없으므로
                     gps.showSettingsAlert();
@@ -111,13 +96,13 @@ public class TourApiActivity extends BaseActivity {
         tourapi = (TextView) findViewById(R.id.tourapi);
     }
 
-    private void getTourData(double mapX, double mapY) {
+    private void getTourData(double mapLon, double mapLat) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(ApiService.BASEURL)
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
-        Call<JsonObject> call = apiService.getTour(mapX, mapY,1000, 500,'Y', 'A', "AND", "pospot","json");
+        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000, 500,'Y', 'A', "AND", "pospot","json");
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -128,10 +113,10 @@ public class TourApiActivity extends BaseActivity {
 
                     for (int i=0; i < tourList.response.body.items.item.size(); i++) {
                         tourItemContenttypeid = tourList.response.body.items.item.get(i).contenttypeid;
-                        tourItemMapx = tourList.response.body.items.item.get(i).mapx;
-                        tourItemMapy = tourList.response.body.items.item.get(i).mapy;
+                        tourItemMapLat = tourList.response.body.items.item.get(i).mapy; // latitude
+                        tourItemMapLon = tourList.response.body.items.item.get(i).mapx; // longitude
                         tourItemTitle = tourList.response.body.items.item.get(i).title;
-                        result += tourItemTitle + "\n" + tourItemMapx + "\n" + tourItemMapy + "\n" + tourItemContenttypeid+"\n\n";
+                        result += tourItemTitle + "\n" + tourItemMapLat + "\n" + tourItemMapLon + "\n" + tourItemContenttypeid+"\n\n";
                     }
                     tourapi.setText(result);
                 }
@@ -161,7 +146,6 @@ public class TourApiActivity extends BaseActivity {
         }
     }
 
-    // 전화번호 권한 요청
     private void callPermission() {
         // Check the SDK version and whether the permission is already granted or not.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

@@ -160,11 +160,11 @@ public class GpsInfo extends Service implements LocationListener {
     public void showSettingsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
-        alertDialog.setTitle("GPS 사용유무셋팅");
-        alertDialog.setMessage("GPS 셋팅이 되지 않았을수도 있습니다. \n 설정창으로 가시겠습니까?");
+        alertDialog.setTitle("GPS 사용 설정");
+        alertDialog.setMessage("GPS 기능 사용 설정이 필요합니다. \n 설정창으로 가시겠습니까?");
 
         // OK 를 누르게 되면 설정창으로 이동합니다.
-        alertDialog.setPositiveButton("Settings",
+        alertDialog.setPositiveButton("네",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int which) {
                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -172,7 +172,7 @@ public class GpsInfo extends Service implements LocationListener {
                     }
                 });
         // Cancle 하면 종료 합니다.
-        alertDialog.setNegativeButton("Cancel",
+        alertDialog.setNegativeButton("아니요",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
