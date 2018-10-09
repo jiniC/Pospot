@@ -39,7 +39,7 @@ public class MainMapActivity extends BaseActivity {
     public Button btnSet;
 
     private static int mMarkerID;
-    private ArrayList<TMapPoint> m_tmapPoint = new ArrayList<TMapPoint>();
+   // private ArrayList<TMapPoint> m_tmapPoint = new ArrayList<TMapPoint>();
     private ArrayList<String> mArrayMarkerID = new ArrayList<String>();
     private ArrayList<MapPoint> m_mapPoint = new ArrayList<MapPoint>();
 
@@ -80,8 +80,8 @@ public class MainMapActivity extends BaseActivity {
                     double longitude = gps.getLongitude();
 
                     // to-be
-                    // 0.0, 0.0 일때는 임시로 서울 시청 위치 넣어두고 -> 토스트창으로 위치 확인이 안되서 임시 데이터로 했다는 토스트 노출하기
-
+                    // 위치 못 찾았을 때 (0.0, 0.0) 임시로 서울 시청 위치 넣어두고
+                    // 토스트창으로 위치 확인이 안되서 임시 데이터로 했다는 토스트 노출하기
 
                     Toast.makeText(
                             getApplicationContext(),
@@ -129,6 +129,44 @@ public class MainMapActivity extends BaseActivity {
         for(int i=0; i < m_mapPoint.size(); i++) {
             TMapPoint point = new TMapPoint(m_mapPoint.get(i).getLatitude(), m_mapPoint.get(i).getLongitude());
             TMapMarkerItem item1 = new TMapMarkerItem();
+
+            int contenttypeid = m_mapPoint.get(i).getType();
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon);
+            switch (contenttypeid) {
+                case 12:
+                    System.out.println("관광지");
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_12);
+                    break;
+                case 14:
+                    System.out.println("문화시설");
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_14);
+                    break;
+                case 15:
+                    System.out.println("축제/공연/행사");
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_15);
+                    break;
+                case 25:
+                    System.out.println("여행코스");
+                    break;
+                case 28:
+                    System.out.println("레포츠");
+                    break;
+                case 32:
+                    System.out.println("숙박");
+                    break;
+                case 38:
+                    System.out.println("쇼핑");
+                    break;
+                case 39:
+                    System.out.println("음식");
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_39);
+                    break;
+                default:
+                    System.out.println("기본");
+                    break;
+            }
+            item1.setIcon(bitmap); // 마커 아이콘 지정
+            item1.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
             item1.setTMapPoint(point);
             item1.setName(m_mapPoint.get(i).getName());
             item1.setVisible(item1.VISIBLE);
@@ -144,7 +182,8 @@ public class MainMapActivity extends BaseActivity {
                 .baseUrl(ApiService.BASEURL)
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
-        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000000, 10000,'Y', 'A', "AND", "pospot","json");
+//        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000000, 10000,'Y', 'A', "AND", "pospot","json");
+        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,5000, 1000,'Y', 'A', "AND", "pospot","json");
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -161,7 +200,7 @@ public class MainMapActivity extends BaseActivity {
                         tourItemTitle = tourList.response.body.items.item.get(i).title;
                         result += tourItemTitle + "\n" + tourItemMapLat + "\n" + tourItemMapLon + "\n" + tourItemContenttypeid+"\n\n";
 
-                        m_mapPoint.add(new MapPoint(tourItemTitle, tourItemMapLat, tourItemMapLon));
+                        m_mapPoint.add(new MapPoint(tourItemTitle, tourItemContenttypeid, tourItemMapLat, tourItemMapLon));
                     }
                     showMarkerPoint();
                     tourapi.setText(result);
@@ -171,6 +210,7 @@ public class MainMapActivity extends BaseActivity {
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
             }
+
         });
     }
 
@@ -206,15 +246,4 @@ public class MainMapActivity extends BaseActivity {
             isPermission = true;
         }
     }
-
-    /*
-    1. TMapMarkerItem 객체를 생성한다.
-    2. TMapPoint 객체를 생성하고 좌표를 등록한다. ( point를 생성할때 (y,x) 순으로 매개변수를 받는다. 주의)
-    3. 마커에 point를 지정한다.
-    4. 마커의 VISIBLE을 설정한다 (TMapMarkerItem.VISIBLE은 int값 1과 같음)
-    5. 마커의 이미지를 설정한다.
-    6. 맵의 중심이 마커로 이동
-    7. 맵에 마커표시
-    * */
-
 }

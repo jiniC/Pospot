@@ -2,6 +2,7 @@ package dongkyul.pospot.view.main;
 
 public class MapPoint {
     private String Name;
+    private int type;
     private double latitude;
     private double longitude;
 
@@ -9,8 +10,9 @@ public class MapPoint {
         super();
     }
 
-    public MapPoint(String Name, double latitude, double longitude) {
+    public MapPoint(String Name, int type, double latitude, double longitude) {
         this.Name = Name;
+        this.type = type;
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -21,6 +23,14 @@ public class MapPoint {
 
     public void setName(String Name) {
         this.Name = Name;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public double getLatitude() {
