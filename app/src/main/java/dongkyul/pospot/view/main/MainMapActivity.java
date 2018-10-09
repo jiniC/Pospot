@@ -33,7 +33,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 public class MainMapActivity extends BaseActivity {
     private Context context = null;
     public TMapView tMapView;
@@ -80,15 +79,24 @@ public class MainMapActivity extends BaseActivity {
                     double latitude = gps.getLatitude();
                     double longitude = gps.getLongitude();
 
+                    // to-be
+                    // 0.0, 0.0 일때는 임시로 서울 시청 위치 넣어두고 -> 토스트창으로 위치 확인이 안되서 임시 데이터로 했다는 토스트 노출하기
+
+
                     Toast.makeText(
                             getApplicationContext(),
                             "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
                             Toast.LENGTH_LONG).show();
 
+                    tMapView.setLocationPoint(longitude,latitude);
+                    tMapView.setCenterPoint(longitude,latitude);
+
                     getTourData(longitude,latitude);
                 } else {
                     gps.showSettingsAlert();
                 }
+
+
             }
         });
 
@@ -103,27 +111,18 @@ public class MainMapActivity extends BaseActivity {
         btnSet = (Button) findViewById(R.id.btnSet);
         tourapi = (TextView) findViewById(R.id.tourapi);
         addMapView();
-        addPoint();
-        showMarkerPoint();
     }
 
     private void addMapView() {
         tMapView.setSKTMapApiKey( "fac21bdf-e297-4eaa-b2a0-fc02db2f6f1f");
         tMapView.setLocationPoint(126.970325,37.556152);
         tMapView.setCenterPoint(126.970325,37.556152);
-        //tMapView.setCompassMode(true);
         tMapView.setIconVisibility(true);
         tMapView.setZoomLevel(15);
         tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
         tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
         tMapView.setTrackingMode(true);
         tMapView.setSightVisible(true);
-    }
-
-    public void addPoint() {
-        m_mapPoint.add(new MapPoint("강남", 37.510350, 127.066847));
-        m_mapPoint.add(new MapPoint("고려대학교", 37.590799, 127.02777730000003));
-        m_mapPoint.add(new MapPoint("서울시청", 37.566535, 126.97796919999996));
     }
 
     public void showMarkerPoint() {
@@ -145,7 +144,7 @@ public class MainMapActivity extends BaseActivity {
                 .baseUrl(ApiService.BASEURL)
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
-        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000, 500,'Y', 'A', "AND", "pospot","json");
+        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000000, 10000,'Y', 'A', "AND", "pospot","json");
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -155,15 +154,20 @@ public class MainMapActivity extends BaseActivity {
                     ResponseContainer tourList = gson.fromJson(body, new TypeToken<ResponseContainer>() {}.getType());
 
                     for (int i=0; i < tourList.response.body.items.item.size(); i++) {
+
                         tourItemContenttypeid = tourList.response.body.items.item.get(i).contenttypeid;
                         tourItemMapLat = tourList.response.body.items.item.get(i).mapy; // latitude
                         tourItemMapLon = tourList.response.body.items.item.get(i).mapx; // longitude
                         tourItemTitle = tourList.response.body.items.item.get(i).title;
                         result += tourItemTitle + "\n" + tourItemMapLat + "\n" + tourItemMapLon + "\n" + tourItemContenttypeid+"\n\n";
+
+                        m_mapPoint.add(new MapPoint(tourItemTitle, tourItemMapLat, tourItemMapLon));
                     }
+                    showMarkerPoint();
                     tourapi.setText(result);
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
             }
@@ -175,15 +179,11 @@ public class MainMapActivity extends BaseActivity {
                                            int[] grantResults) {
         if (requestCode == PERMISSIONS_ACCESS_FINE_LOCATION
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
             isAccessFineLocation = true;
-
         } else if (requestCode == PERMISSIONS_ACCESS_COARSE_LOCATION
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
             isAccessCoarseLocation = true;
         }
-
         if (isAccessFineLocation && isAccessCoarseLocation) {
             isPermission = true;
         }
@@ -193,18 +193,15 @@ public class MainMapActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-
             requestPermissions(
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_ACCESS_FINE_LOCATION);
-
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
-
-            requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    PERMISSIONS_ACCESS_COARSE_LOCATION);
+                    requestPermissions(
+                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                            PERMISSIONS_ACCESS_COARSE_LOCATION);
         } else {
             isPermission = true;
         }
