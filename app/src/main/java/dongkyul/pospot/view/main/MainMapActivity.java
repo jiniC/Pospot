@@ -40,6 +40,7 @@ public class MainMapActivity extends BaseActivity {
     private Context context = null;
     public TMapView tMapView;
     public Button btnSet;
+    public Button btnMyLocation;
 
     private static int mMarkerID;
     private ArrayList<String> mArrayMarkerID = new ArrayList<String>();
@@ -63,6 +64,13 @@ public class MainMapActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
         init();
+        btnMyLocation.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                loadPosition();
+            }
+        });
+
     }
 
     @Override
@@ -71,6 +79,7 @@ public class MainMapActivity extends BaseActivity {
         ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.layout);
         tMapView = (TMapView)findViewById(R.id.tmapView);
         btnSet = (Button) findViewById(R.id.btnSet);
+        btnMyLocation = (Button) findViewById(R.id.btnMyLocation);
         addMapView();
         callPermission();
         loadPosition();
@@ -105,6 +114,7 @@ public class MainMapActivity extends BaseActivity {
     }
 
     public void loadPosition(){
+
         if (!isPermission) {
             callPermission();
             return;
@@ -117,9 +127,6 @@ public class MainMapActivity extends BaseActivity {
                 double latitude = gps.getLatitude();
                 double longitude = gps.getLongitude();
 
-                // to-be
-                // 위치 못 찾았을 때 (0.0, 0.0) 임시로 서울 시청 위치 넣어두기?
-                // 다시찾기버튼 이랑 기본위치로보기 버튼? -> 이걸로
                 if(latitude!=0.0&&longitude!=0.0) {
                     Toast.makeText(
                             getApplicationContext(),
