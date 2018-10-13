@@ -161,8 +161,6 @@ public class MainMapActivity extends BaseActivity {
 
             @Override
             public boolean onPressUpEvent(ArrayList<TMapMarkerItem> arrayMapMarkerItem, ArrayList<TMapPOIItem> arrayMapPOIItem, TMapPoint mapPoint, PointF pointF) {
-                // to-be
-                // 클릭된 마커 객체 데이터 가져와야 함 TMapMarkerItem 배열
                 if(!arrayMapMarkerItem.isEmpty()) {
                     String MarkerID = arrayMapMarkerItem.get(0).getID();
                     TMapMarkerItem markeritem = tMapView.getMarkerItemFromID(String.valueOf(MarkerID));
@@ -171,10 +169,10 @@ public class MainMapActivity extends BaseActivity {
                             getApplicationContext(),
                             "마커가 클릭됬습니다!\n"+MarkerName,
                             Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainMapActivity.this, CrawlingApiTestActivity.class);
+                    intent.putExtra("markerName",MarkerName);
+                    startActivity(intent);
                 }
-//                Intent intent = new Intent(MainMapActivity.this, CrawlingApiTestActivity.class);
-//                intent.putExtra("markerName",MapPoint.getName());
-//                startActivity(intent);
                 return false;
             }
         });

@@ -29,12 +29,11 @@ public class CrawlingApiTestActivity extends BaseActivity {
         super.init();
         setContentView(R.layout.activity_insta_image);
         editText = (EditText)findViewById(R.id.filterSearch);
-        // to-be
-        // MainMapActivity에서 클릭된 마커 객체 데이터 가져와야 함
-//        Intent intent = getIntent();
-//        Bundle extras = intent.getExtras();
-//        String searchItem = extras.getString("markerName");
-//        editText.setText(searchItem);
+        // 클릭 마커 이름
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        String searchItem = extras.getString("markerName");
+        editText.setText(searchItem);
         Button filterSearchButton = (Button)findViewById(R.id.filterSearchButton);
         filterSearchButton.setOnClickListener(this);
         Button orderTagButton = (Button)findViewById(R.id.order_tag);
