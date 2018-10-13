@@ -22,6 +22,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.skt.Tmap.TMapMarkerItem;
+import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
@@ -42,16 +43,12 @@ public class MainMapActivity extends BaseActivity {
 
     private static int mMarkerID;
     private ArrayList<String> mArrayMarkerID = new ArrayList<String>();
-    private ArrayList<MapPoint> m_mapPoint = new ArrayList<MapPoint>();
+    private ArrayList<TMapMarkerItem> m_mapMarkerItem = new ArrayList<TMapMarkerItem>();
 
-    TextView tourapi;
-    double mapLon;
-    double mapLat;
-    int tourItemContenttypeid;
-    double tourItemMapLat;
-    double tourItemMapLon;
+    String tourItemContenttypeid;
+    float tourItemMapLat;
+    float tourItemMapLon;
     String tourItemTitle;
-    String result = "\n";
 
     private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
     private final int PERMISSIONS_ACCESS_COARSE_LOCATION = 1001;
@@ -74,7 +71,6 @@ public class MainMapActivity extends BaseActivity {
         ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.layout);
         tMapView = (TMapView)findViewById(R.id.tmapView);
         btnSet = (Button) findViewById(R.id.btnSet);
-        tourapi = (TextView) findViewById(R.id.tourapi);
         addMapView();
         callPermission();
         loadPosition();
@@ -160,71 +156,86 @@ public class MainMapActivity extends BaseActivity {
         tMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback() {
             @Override
             public boolean onPressEvent(ArrayList arrayList, ArrayList arrayList1, TMapPoint tMapPoint, PointF pointF) {
-                // to-be
-                // 클릭된 마커 객체 데이터 가져와야 함
-//                Toast.makeText(
-//                        getApplicationContext(),
-//                        "마커가 클릭됬습니다!\n"+MapPoint.getName(),
-//                        Toast.LENGTH_LONG).show();
-//
-//                Intent intent = new Intent(MainMapActivity.this, CrawlingApiTestActivity.class);
-//                intent.putExtra("markerName",MapPoint.getName());
-//
-//                startActivity(intent);
                 return false;
             }
 
             @Override
-            public boolean onPressUpEvent(ArrayList arrayList, ArrayList arrayList1, TMapPoint tMapPoint, PointF pointF) {
+            public boolean onPressUpEvent(ArrayList<TMapMarkerItem> arrayMapMarkerItem, ArrayList<TMapPOIItem> arrayMapPOIItem, TMapPoint mapPoint, PointF pointF) {
+                // to-be
+                // 클릭된 마커 객체 데이터 가져와야 함 TMapMarkerItem 배열
+                if(!arrayMapMarkerItem.isEmpty()) {
+                    String MarkerID = arrayMapMarkerItem.get(0).getID();
+                    TMapMarkerItem markeritem = tMapView.getMarkerItemFromID(String.valueOf(MarkerID));
+                    String MarkerName = markeritem.getName();
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "마커가 클릭됬습니다!\n"+MarkerName,
+                            Toast.LENGTH_LONG).show();
+                }
+//                Intent intent = new Intent(MainMapActivity.this, CrawlingApiTestActivity.class);
+//                intent.putExtra("markerName",MapPoint.getName());
+//                startActivity(intent);
                 return false;
+            }
+        });
+
+        tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
+            @Override
+            public void onLongPressEvent(ArrayList markerlist,ArrayList poilist, TMapPoint point) {
+                if(markerlist.isEmpty()) {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "앨범 등록을 위한 위치 선택 완료!\n"+point.getLatitude()+"\n"+point.getLongitude()+"\n",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
 
     public void showMarkerPoint() {
-        for(int i=0; i < m_mapPoint.size(); i++) {
-            TMapPoint point = new TMapPoint(m_mapPoint.get(i).getLatitude(), m_mapPoint.get(i).getLongitude());
+        for(int i=0; i < m_mapMarkerItem.size(); i++) {
+            TMapPoint point = m_mapMarkerItem.get(i).getTMapPoint();
             TMapMarkerItem item1 = new TMapMarkerItem();
 
-            int contenttypeid = m_mapPoint.get(i).getType();
+            int contenttypeid = Integer.parseInt(m_mapMarkerItem.get(i).getCalloutSubTitle());
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon);
             switch (contenttypeid) {
                 case 12:
-                    //System.out.println("관광지");
+                    // 관광지
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_12);
                     break;
                 case 14:
-                    //System.out.println("문화시설");
+                    // 문화시설
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_14);
                     break;
                 case 15:
-                    //System.out.println("축제/공연/행사");
+                    // 축제/공연/행사
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_15);
                     break;
                 case 25:
-                    //System.out.println("여행코스");
+                    // 여행코스
                     break;
                 case 28:
-                    //System.out.println("레포츠");
+                    // 레포츠
                     break;
                 case 32:
-                    //System.out.println("숙박");
+                    // 숙박
                     break;
                 case 38:
-                    //System.out.println("쇼핑");
+                    // 쇼핑
                     break;
                 case 39:
-                    System.out.println("음식");
+                    // 음식
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_39);
                     break;
                 default:
-                    System.out.println("기본");
+                    // 기본
                     break;
             }
             item1.setIcon(bitmap);
             item1.setPosition(0.5f, 1.0f);
             item1.setTMapPoint(point);
-            item1.setName(m_mapPoint.get(i).getName());
+            item1.setName(m_mapMarkerItem.get(i).getName());
             item1.setVisible(item1.VISIBLE);
             String strID = String.format("pmarker%d",mMarkerID++);
             tMapView.addMarkerItem(strID, item1);
@@ -238,7 +249,7 @@ public class MainMapActivity extends BaseActivity {
                 .baseUrl(ApiService.BASEURL)
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
-//        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000000, 10000,'Y', 'A', "AND", "pospot","json");
+        // Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000000, 10000,'Y', 'A', "AND", "pospot","json");
         Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000, 1000,'Y', 'A', "AND", "pospot","json");
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -249,15 +260,16 @@ public class MainMapActivity extends BaseActivity {
                     ResponseContainer tourList = gson.fromJson(body, new TypeToken<ResponseContainer>() {}.getType());
 
                     for (int i=0; i < tourList.response.body.items.item.size(); i++) {
-
-                        tourItemContenttypeid = tourList.response.body.items.item.get(i).contenttypeid;
-                        tourItemMapLat = tourList.response.body.items.item.get(i).mapy; // latitude
-                        tourItemMapLon = tourList.response.body.items.item.get(i).mapx; // longitude
+                        tourItemContenttypeid = String.valueOf(tourList.response.body.items.item.get(i).contenttypeid);
+                        tourItemMapLat = (float) tourList.response.body.items.item.get(i).mapy; // latitude
+                        tourItemMapLon = (float) tourList.response.body.items.item.get(i).mapx; // longitude
                         tourItemTitle = tourList.response.body.items.item.get(i).title;
-                        result += tourItemTitle + "\n" + tourItemMapLat + "\n" + tourItemMapLon + "\n" + tourItemContenttypeid+"\n\n";
-
-                        m_mapPoint.add(new MapPoint(tourItemTitle, tourItemContenttypeid, tourItemMapLat, tourItemMapLon));
+                        m_mapMarkerItem.add(new TMapMarkerItem());
+                        m_mapMarkerItem.get(i).setTMapPoint(new TMapPoint(tourItemMapLat, tourItemMapLon));
+                        m_mapMarkerItem.get(i).setName(tourItemTitle);
+                        m_mapMarkerItem.get(i).setCalloutSubTitle(String.valueOf(tourItemContenttypeid));
                     }
+
                     showMarkerPoint();
                 }
             }
