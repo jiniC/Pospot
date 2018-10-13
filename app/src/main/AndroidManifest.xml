@@ -25,6 +25,7 @@
         <activity android:name=".view.main.CrawlingApiTestActivity" />
         <activity android:name=".view.main.MainMapActivity" />
         <activity android:name=".view.main.TagRankActivity"></activity>
+        <activity android:name=".view.main.AddPhotoMarker"></activity>
     </application>
 
 </manifest>

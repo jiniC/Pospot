@@ -1,7 +1,9 @@
 package dongkyul.pospot.view.main;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
@@ -67,6 +70,8 @@ public class MainMapActivity extends BaseActivity {
         btnMyLocation.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                // to-be
+                // 관광 데이터 있는데 한번 더 누르면 뜨는 오류 해결하기
                 loadPosition();
             }
         });
@@ -192,6 +197,7 @@ public class MainMapActivity extends BaseActivity {
                             getApplicationContext(),
                             "앨범 등록을 위한 위치 선택 완료!\n"+point.getLatitude()+"\n"+point.getLongitude()+"\n",
                             Toast.LENGTH_LONG).show();
+                    addPhotoMarker(point.getLatitude(), point.getLongitude());
                 }
             }
         });
@@ -325,5 +331,32 @@ public class MainMapActivity extends BaseActivity {
         switch (v.getId()){
 
         }
+    }
+
+
+    public void addPhotoMarker(final double pointLat, final double pointLon) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainMapActivity.this);
+
+        alertDialog.setTitle("포토 마커 등록");
+        alertDialog.setMessage("해당 위치에 포토마커를 생성할까요?");
+
+        alertDialog.setPositiveButton("네",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int which) {
+                        Intent intent = new Intent(MainMapActivity.this, AddPhotoMarker.class);
+                        intent.putExtra("pointLat",pointLat);
+                        intent.putExtra("pointLon",pointLon);
+                        startActivity(intent);
+                    }
+                });
+
+        alertDialog.setNegativeButton("아니요",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
     }
 }
