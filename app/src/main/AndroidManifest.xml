@@ -25,7 +25,6 @@
         <activity android:name=".view.main.CrawlingApiTestActivity" />
         <activity android:name=".view.main.MainMapActivity" />
         <activity android:name=".view.main.TagRankActivity"></activity>
-        <activity android:name=".view.main.TourApiActivity"></activity>
     </application>
 
 </manifest>
