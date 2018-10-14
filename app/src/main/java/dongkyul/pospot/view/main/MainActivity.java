@@ -15,14 +15,14 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnInstaImage = (Button) findViewById(R.id.btnInstaImage);
+        Button btnGridPhoto = (Button) findViewById(R.id.btnGridPhoto);
         Button btnMain = (Button) findViewById(R.id.btnMain);
         //Button btnTourAPI = (Button) findViewById(R.id.btnTourAPI);
 
-        btnInstaImage.setOnClickListener(new View.OnClickListener(){
+        btnGridPhoto.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CrawlingApiTestActivity.class);
+                Intent intent = new Intent(MainActivity.this, PhotoMainActivity.class);
                 startActivity(intent);
             }
         });
