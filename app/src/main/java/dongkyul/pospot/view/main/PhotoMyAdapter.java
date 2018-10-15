@@ -3,24 +3,24 @@ package dongkyul.pospot.view.main;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import dongkyul.pospot.R;
 
-public class PhotoMyAdapter extends RecyclerView.Adapter<PlaceViewHolder> {
+public class PhotoMyAdapter extends RecyclerView.Adapter<PhotoMyAdapter.PlaceViewHolder> {
 
     private Context mContext;
     private int[] mPlaceList;
+    View.OnClickListener pickPhotoListener;
 
-    public PhotoMyAdapter(Context mContext, int[] mPlaceList) {
+    public PhotoMyAdapter(Context mContext, int[] mPlaceList, View.OnClickListener pickPhotoListener) {
         this.mContext = mContext;
         this.mPlaceList = mPlaceList;
+        this.pickPhotoListener = pickPhotoListener;
     }
 
     @Override
@@ -41,13 +41,7 @@ public class PhotoMyAdapter extends RecyclerView.Adapter<PlaceViewHolder> {
     public void onBindViewHolder(final PlaceViewHolder holder, int position) {
 
         if(position == mPlaceList.length) {
-            holder.addBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //Toast.makeText(mContext,"버튼클릭!",Toast.LENGTH_LONG);
-                    Log.e("click button!?!?","ok");
-                }
-            });
+           holder.addBtn.setOnClickListener(pickPhotoListener);
         }
         else {
             holder.mPlace.setImageResource(mPlaceList[position]);
@@ -71,17 +65,18 @@ public class PhotoMyAdapter extends RecyclerView.Adapter<PlaceViewHolder> {
     public int getItemViewType(int position) {
         return (position == mPlaceList.length) ? R.layout.activity_photo_add_button : R.layout.activity_photo_recyclerview_custom_layout;
     }
-}
 
-class PlaceViewHolder extends RecyclerView.ViewHolder {
+    class PlaceViewHolder extends RecyclerView.ViewHolder {
 
-    ImageView mPlace;
-    Button addBtn;
+        ImageView mPlace;
+        Button addBtn;
 
-    public PlaceViewHolder(View itemView) {
-        super(itemView);
+        public PlaceViewHolder(View itemView) {
+            super(itemView);
 
-        mPlace = itemView.findViewById(R.id.ivPlace);
-        addBtn = itemView.findViewById(R.id.btnAddPhoto);
+            mPlace = itemView.findViewById(R.id.ivPlace);
+            addBtn = itemView.findViewById(R.id.btnAddPhoto);
+        }
     }
 }
+
