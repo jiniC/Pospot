@@ -11,20 +11,20 @@ import android.widget.ImageView;
 
 import dongkyul.pospot.R;
 
-public class PhotoMyAdapter extends RecyclerView.Adapter<PhotoMyAdapter.PlaceViewHolder> {
+public class PhotoMyAdapter extends RecyclerView.Adapter<PhotoMyAdapter.PhotoViewHolder> {
 
     private Context mContext;
-    private int[] mPlaceList;
+    private int[] mPhotoList;
     View.OnClickListener pickPhotoListener;
 
-    public PhotoMyAdapter(Context mContext, int[] mPlaceList, View.OnClickListener pickPhotoListener) {
+    public PhotoMyAdapter(Context mContext, int[] mPhotoList, View.OnClickListener pickPhotoListener) {
         this.mContext = mContext;
-        this.mPlaceList = mPlaceList;
+        this.mPhotoList = mPhotoList;
         this.pickPhotoListener = pickPhotoListener;
     }
 
     @Override
-    public PlaceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view;
 
@@ -34,22 +34,22 @@ public class PhotoMyAdapter extends RecyclerView.Adapter<PhotoMyAdapter.PlaceVie
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_photo_recyclerview_custom_layout,  parent, false);
         }
 
-        return new PlaceViewHolder(view);
+        return new PhotoViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final PlaceViewHolder holder, int position) {
+    public void onBindViewHolder(final PhotoViewHolder holder, int position) {
 
-        if(position == mPlaceList.length) {
+        if(position == mPhotoList.length) {
            holder.addBtn.setOnClickListener(pickPhotoListener);
         }
         else {
-            holder.mPlace.setImageResource(mPlaceList[position]);
-            holder.mPlace.setOnClickListener(new View.OnClickListener() {
+            holder.mPhoto.setImageResource(mPhotoList[position]);
+            holder.mPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent mIntent = new Intent(mContext, PhotoDetailActivity.class);
-                    mIntent.putExtra("Image", mPlaceList[holder.getAdapterPosition()]);
+                    mIntent.putExtra("Image", mPhotoList[holder.getAdapterPosition()]);
                     mContext.startActivity(mIntent);
                 }
             });
@@ -58,23 +58,23 @@ public class PhotoMyAdapter extends RecyclerView.Adapter<PhotoMyAdapter.PlaceVie
 
     @Override
     public int getItemCount() {
-        return mPlaceList.length+1;
+        return mPhotoList.length+1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == mPlaceList.length) ? R.layout.activity_photo_add_button : R.layout.activity_photo_recyclerview_custom_layout;
+        return (position == mPhotoList.length) ? R.layout.activity_photo_add_button : R.layout.activity_photo_recyclerview_custom_layout;
     }
 
-    class PlaceViewHolder extends RecyclerView.ViewHolder {
+    class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView mPlace;
+        ImageView mPhoto;
         Button addBtn;
 
-        public PlaceViewHolder(View itemView) {
+        public PhotoViewHolder(View itemView) {
             super(itemView);
 
-            mPlace = itemView.findViewById(R.id.ivPlace);
+            mPhoto = itemView.findViewById(R.id.ivPhoto);
             addBtn = itemView.findViewById(R.id.btnAddPhoto);
         }
     }

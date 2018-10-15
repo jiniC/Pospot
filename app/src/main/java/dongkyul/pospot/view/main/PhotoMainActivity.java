@@ -23,7 +23,7 @@ import dongkyul.pospot.R;
 public class PhotoMainActivity extends AppCompatActivity {
 
     RecyclerView mRecyclerView;
-    int[] mPlaceList;
+    int[] mPhotoList;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_iMAGE = 2;
@@ -33,7 +33,7 @@ public class PhotoMainActivity extends AppCompatActivity {
     public Button btnViewFilter;
     public Button btnAddPhoto;
 
-    private ImageView viewImage1;
+    public ImageView viewImage1;
     private int id_view;
     private String absolutePath;
 
@@ -51,11 +51,16 @@ public class PhotoMainActivity extends AppCompatActivity {
             }
         };
 
+        viewImage1 = findViewById(R.id.imageView1);
+
         mRecyclerView = findViewById(R.id.recyclerview);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMainActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
-        mPlaceList = new int[]{R.drawable.image_1, R.drawable.image_2, R.drawable.image_2};
-        PhotoMyAdapter myAdapter = new PhotoMyAdapter(PhotoMainActivity.this, mPlaceList,pickFromCameraListener);
+
+        // to-be
+        // 앨범에서 선택한 이미지 mPhotoList에 추가하기
+        mPhotoList = new int[]{R.drawable.image_1, R.drawable.image_2, R.drawable.image_2};
+        PhotoMyAdapter myAdapter = new PhotoMyAdapter(PhotoMainActivity.this, mPhotoList, pickFromCameraListener);
         mRecyclerView.setAdapter(myAdapter);
     }
 
@@ -75,7 +80,7 @@ public class PhotoMainActivity extends AppCompatActivity {
             case PICK_FROM_ALBUM:
             {
                 mImageCaptureUri = data.getData();
-                Log.d("PICK_FROM_ALBUM??", mImageCaptureUri.getPath().toString());
+                //Log.d("PICK_FROM_ALBUM??", mImageCaptureUri.getPath().toString());
             }
             case PICK_FROM_CAMERA:
             {

@@ -8,17 +8,17 @@ import dongkyul.pospot.R;
 
 public class PhotoDetailActivity extends AppCompatActivity {
 
-    ImageView mPlace;
+    ImageView mBigPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
 
-        mPlace = findViewById(R.id.imageView);
+        mBigPhoto = findViewById(R.id.imageView);
         Bundle mBundle = getIntent().getExtras();
         if(mBundle != null){
-            mPlace.setImageResource(mBundle.getInt("Image"));
+            mBigPhoto.setImageResource(mBundle.getInt("Image"));
         }
     }
 }
