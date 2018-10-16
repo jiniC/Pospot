@@ -17,13 +17,15 @@ import android.widget.ImageView;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import dongkyul.pospot.R;
 
 public class PhotoMainActivity extends AppCompatActivity {
 
     RecyclerView mRecyclerView;
-    int[] mPhotoList;
+    List<Bitmap> mPhotoList_img;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_iMAGE = 2;
@@ -33,11 +35,12 @@ public class PhotoMainActivity extends AppCompatActivity {
     public Button btnViewFilter;
     public Button btnAddPhoto;
 
-    public ImageView viewImage1;
     private int id_view;
     private String absolutePath;
 
     private DB_Manager db_manager;
+
+    PhotoMyAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +50,20 @@ public class PhotoMainActivity extends AppCompatActivity {
         View.OnClickListener pickFromCameraListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // to-be
+                // 버튼클릭에 연동 말고 이미지 추가되면 바로 뷰 업데이트 실행
+                mRecyclerView.setAdapter(myAdapter);
                 doTakeAlbumAction();
+                mRecyclerView.setAdapter(myAdapter);
             }
         };
-
-        viewImage1 = findViewById(R.id.imageView1);
 
         mRecyclerView = findViewById(R.id.recyclerview);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMainActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
-        // to-be
-        // 앨범에서 선택한 이미지 mPhotoList에 추가하기
-        mPhotoList = new int[]{R.drawable.image_1, R.drawable.image_2, R.drawable.image_2};
-        PhotoMyAdapter myAdapter = new PhotoMyAdapter(PhotoMainActivity.this, mPhotoList, pickFromCameraListener);
+        mPhotoList_img = new ArrayList<Bitmap>();
+        myAdapter = new PhotoMyAdapter(PhotoMainActivity.this, mPhotoList_img, pickFromCameraListener);
         mRecyclerView.setAdapter(myAdapter);
     }
 
@@ -68,6 +71,7 @@ public class PhotoMainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_ALBUM);
+        mRecyclerView.setAdapter(myAdapter);
     }
 
     @Override
@@ -104,8 +108,9 @@ public class PhotoMainActivity extends AppCompatActivity {
                 String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pospot/"+System.currentTimeMillis()+".jpg";
                 if(extras!=null) {
                     Bitmap photo = extras.getParcelable("data");
-                    viewImage1.setImageBitmap(photo);
-                    storeCropImage(photo,filePath);
+                    // to-be 이미지 뷰에 추가되게
+                    mPhotoList_img.add(photo);
+                    storeCropImage(photo, filePath);
                     absolutePath = filePath;
                     break;
                 }
