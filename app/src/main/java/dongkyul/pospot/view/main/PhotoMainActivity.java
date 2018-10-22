@@ -52,7 +52,6 @@ public class PhotoMainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // to-be
                 // 버튼클릭에 연동 말고 이미지 추가되면 바로 뷰 업데이트 실행
-                mRecyclerView.setAdapter(myAdapter);
                 doTakeAlbumAction();
                 mRecyclerView.setAdapter(myAdapter);
             }
@@ -61,7 +60,6 @@ public class PhotoMainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerview);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMainActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
-
         mPhotoList_img = new ArrayList<Bitmap>();
         myAdapter = new PhotoMyAdapter(PhotoMainActivity.this, mPhotoList_img, pickFromCameraListener);
         mRecyclerView.setAdapter(myAdapter);
