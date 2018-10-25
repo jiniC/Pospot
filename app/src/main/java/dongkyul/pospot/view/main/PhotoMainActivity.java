@@ -9,10 +9,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -53,7 +51,6 @@ public class PhotoMainActivity extends AppCompatActivity {
                 // to-be
                 // 버튼클릭에 연동 말고 이미지 추가되면 바로 뷰 업데이트 실행
                 doTakeAlbumAction();
-                mRecyclerView.setAdapter(myAdapter);
             }
         };
 
@@ -69,7 +66,6 @@ public class PhotoMainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_ALBUM);
-        mRecyclerView.setAdapter(myAdapter);
     }
 
     @Override
@@ -118,6 +114,7 @@ public class PhotoMainActivity extends AppCompatActivity {
                 }
             }
         }
+        myAdapter.notifyDataSetChanged();
     }
 
     private void storeCropImage(Bitmap bitmap, String filePath) {
