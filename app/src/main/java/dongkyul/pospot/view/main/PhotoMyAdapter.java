@@ -53,14 +53,15 @@ public class PhotoMyAdapter extends RecyclerView.Adapter<PhotoMyAdapter.PhotoVie
 
         else {
             holder.mPhoto.setImageBitmap(mPhotoList_img.get(position));
-            holder.mPhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent mIntent = new Intent(mContext, PhotoDetailActivity.class);
-                    mIntent.putExtra("Image", mPhotoList_img.get(holder.getAdapterPosition()));
-                    mContext.startActivity(mIntent);
-                }
-            });
+            // 사진 클릭 시 이미지 확대
+//            holder.mPhoto.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent mIntent = new Intent(mContext, PhotoDetailActivity.class);
+//                    mIntent.putExtra("Image", mPhotoList_img.get(holder.getAdapterPosition()));
+//                    mContext.startActivity(mIntent);
+//                }
+//            });
         }
     }
 

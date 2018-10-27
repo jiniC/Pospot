@@ -15,17 +15,17 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnGridPhoto = (Button) findViewById(R.id.btnGridPhoto);
+        Button btnMyTour = (Button) findViewById(R.id.btnMyTour);
         Button btnMain = (Button) findViewById(R.id.btnMain);
-        //Button btnTourAPI = (Button) findViewById(R.id.btnTourAPI);
+;
+//        btnMyTour.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, PhotoMainActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        btnGridPhoto.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, PhotoMainActivity.class);
-                startActivity(intent);
-            }
-        });
         btnMain.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -33,12 +33,5 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-//        btnTourAPI.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, TourApiActivity.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 }

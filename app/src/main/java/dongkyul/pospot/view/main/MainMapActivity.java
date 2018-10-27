@@ -343,7 +343,7 @@ public class MainMapActivity extends BaseActivity {
         alertDialog.setPositiveButton("네",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int which) {
-                        Intent intent = new Intent(MainMapActivity.this, AddPhotoMarker.class);
+                        Intent intent = new Intent(MainMapActivity.this, PhotoMainActivity.class);
                         intent.putExtra("pointLat",pointLat);
                         intent.putExtra("pointLon",pointLon);
                         startActivity(intent);

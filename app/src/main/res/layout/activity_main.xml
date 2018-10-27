@@ -13,20 +13,18 @@
         tools:layout_editor_absoluteY="4dp">
 
         <Button
-            android:id="@+id/btnGridPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="그리드 사진보기"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="351dp" />
-
-        <Button
             android:id="@+id/btnMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="메인 화면"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="311dp" />
+
+        <Button
+            android:id="@+id/btnMyTour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mytour SNS공유" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

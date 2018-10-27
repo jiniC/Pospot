@@ -20,18 +20,27 @@
             android:text="홈" />
 
         <Button
-            android:id="@+id/btnRepresent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="대표 이미지 선택" />
-
-        <Button
-            android:id="@+id/btnCreate"
+            android:id="@+id/btnMarkerCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="포토 마커 생성" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="마커의 타이틀을 입력하세요."
+            android:inputType="textPersonName" />
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

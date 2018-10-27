@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -30,8 +31,8 @@ public class PhotoMainActivity extends AppCompatActivity {
 
     private Uri mImageCaptureUri;
     public Button btnHome;
-    public Button btnViewFilter;
-    public Button btnAddPhoto;
+    public Button btnMarkerCreate;
+    EditText textTitle;
 
     private int id_view;
     private String absolutePath;
@@ -48,8 +49,6 @@ public class PhotoMainActivity extends AppCompatActivity {
         View.OnClickListener pickFromCameraListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // to-be
-                // 버튼클릭에 연동 말고 이미지 추가되면 바로 뷰 업데이트 실행
                 doTakeAlbumAction();
             }
         };
@@ -60,6 +59,29 @@ public class PhotoMainActivity extends AppCompatActivity {
         mPhotoList_img = new ArrayList<Bitmap>();
         myAdapter = new PhotoMyAdapter(PhotoMainActivity.this, mPhotoList_img, pickFromCameraListener);
         mRecyclerView.setAdapter(myAdapter);
+
+        btnHome = (Button) findViewById(R.id.btnHome);
+        btnMarkerCreate = (Button) findViewById(R.id.btnMarkerCreate);
+        textTitle = (EditText)findViewById(R.id.textTitle);
+
+        btnHome.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PhotoMainActivity.this,PhotoMainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnMarkerCreate.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // to-be
+                // realm DB에 저장
+                Intent intent = new Intent(PhotoMainActivity.this,PhotoRealmDBCheck.class);
+                intent.putExtra("MarkerTitle", textTitle.getText().toString());
+                startActivity(intent);
+            }
+        });
     }
 
     public void doTakeAlbumAction() {
@@ -102,7 +124,6 @@ public class PhotoMainActivity extends AppCompatActivity {
                 String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pospot/"+System.currentTimeMillis()+".jpg";
                 if(extras!=null) {
                     Bitmap photo = extras.getParcelable("data");
-                    // to-be 이미지 뷰에 추가되게
                     mPhotoList_img.add(photo);
                     storeCropImage(photo, filePath);
                     absolutePath = filePath;
@@ -137,5 +158,4 @@ public class PhotoMainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }
