@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dongkyul.pospot.R;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class PhotoMainActivity extends AppCompatActivity {
 
@@ -41,6 +44,10 @@ public class PhotoMainActivity extends AppCompatActivity {
 
     PhotoMyAdapter myAdapter;
 
+    Realm realm;
+    double pointLat;
+    double pointLon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +68,13 @@ public class PhotoMainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(myAdapter);
 
         btnHome = (Button) findViewById(R.id.btnHome);
+
         btnMarkerCreate = (Button) findViewById(R.id.btnMarkerCreate);
         textTitle = (EditText)findViewById(R.id.textTitle);
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        pointLat = extras.getDouble("pointLat");
+        pointLon = extras.getDouble("pointLon");
 
         btnHome.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -72,13 +84,24 @@ public class PhotoMainActivity extends AppCompatActivity {
             }
         });
 
+        Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder().build();
+//        Realm.setDefaultConfiguration(realmConfiguration);
+//        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoMarkerDB").deleteRealmIfMigrationNeeded().build();
+        realm = Realm.getInstance(config);
+
         btnMarkerCreate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                // to-be
-                // realm DB에 저장
                 Intent intent = new Intent(PhotoMainActivity.this,PhotoRealmDBCheck.class);
-                intent.putExtra("MarkerTitle", textTitle.getText().toString());
+                realm.beginTransaction();
+                PhotoMarkerDB obj = realm.createObject(PhotoMarkerDB.class);
+                obj.setTitle(textTitle.getText().toString());
+                obj.setLat(pointLat);
+                obj.setLon(pointLon);
+                realm.commitTransaction();
+                realm.close();
+                finish();
                 startActivity(intent);
             }
         });
@@ -100,7 +123,6 @@ public class PhotoMainActivity extends AppCompatActivity {
             case PICK_FROM_ALBUM:
             {
                 mImageCaptureUri = data.getData();
-                //Log.d("PICK_FROM_ALBUM??", mImageCaptureUri.getPath().toString());
             }
             case PICK_FROM_CAMERA:
             {

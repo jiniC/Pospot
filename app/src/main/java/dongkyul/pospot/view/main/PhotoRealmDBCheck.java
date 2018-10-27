@@ -6,24 +6,29 @@ import android.widget.TextView;
 
 import dongkyul.pospot.R;
 import dongkyul.pospot.view.common.BaseActivity;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class PhotoRealmDBCheck extends BaseActivity {
 
-    String MarkerTitle;
+    TextView tvMarkerTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_db);
-        init();
+        tvMarkerTitle = (TextView)findViewById(R.id.tvMarkerTitle);
+
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<PhotoMarkerDB> results = realm.where(PhotoMarkerDB.class).findAllAsync();
+        results.load();
+        String output="";
+        for(PhotoMarkerDB photoMarkerDB:results){
+            output += photoMarkerDB.toString();
+        }
+        tvMarkerTitle.setText(output);
+        realm.close();
     }
 
-
-    @Override
-    public void init() {
-        super.init();
-        MarkerTitle = getIntent().getStringExtra("MarkerTitle");
-        TextView tvMarkerTitle = (TextView)findViewById(R.id.tvMarkerTitle);
-        tvMarkerTitle.setText(MarkerTitle);
-    }
 }
