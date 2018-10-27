@@ -1,5 +1,10 @@
 package dongkyul.pospot.view.main;
 
+import android.graphics.Bitmap;
+
+import java.util.List;
+
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -10,6 +15,7 @@ public class PhotoMarkerDB extends RealmObject {
     private String title;
     private double lat;
     private double lon;
+//    private RealmList<byte[]> photoList;
 
     @Override
     public String toString() {
@@ -40,5 +46,12 @@ public class PhotoMarkerDB extends RealmObject {
     public void setLon(double lon) {
         this.lon = lon;
     }
+//
+//    public RealmList<byte[]>getPhotoList() {
+//        return photoList;
+//    }
+//    public void setPhotoList(RealmList<byte[]> photoList) {
+//        this.photoList = photoList;
+//    }
 }
 

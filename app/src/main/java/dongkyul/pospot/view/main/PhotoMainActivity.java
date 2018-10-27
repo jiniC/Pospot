@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,18 +15,21 @@ import android.widget.EditText;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import dongkyul.pospot.R;
+import dongkyul.pospot.view.common.BaseActivity;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
+import io.realm.RealmList;
 
-public class PhotoMainActivity extends AppCompatActivity {
+public class PhotoMainActivity extends BaseActivity {
 
     RecyclerView mRecyclerView;
     List<Bitmap> mPhotoList_img;
+    RealmList<byte[]> mPhotoList_byte;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_iMAGE = 2;
@@ -64,6 +66,7 @@ public class PhotoMainActivity extends AppCompatActivity {
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMainActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mPhotoList_img = new ArrayList<Bitmap>();
+        mPhotoList_byte = new RealmList<>();
         myAdapter = new PhotoMyAdapter(PhotoMainActivity.this, mPhotoList_img, pickFromCameraListener);
         mRecyclerView.setAdapter(myAdapter);
 
@@ -79,7 +82,7 @@ public class PhotoMainActivity extends AppCompatActivity {
         btnHome.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PhotoMainActivity.this,PhotoMainActivity.class);
+                Intent intent = new Intent(PhotoMainActivity.this, MainMapActivity.class);
                 startActivity(intent);
             }
         });
@@ -99,6 +102,7 @@ public class PhotoMainActivity extends AppCompatActivity {
                 obj.setTitle(textTitle.getText().toString());
                 obj.setLat(pointLat);
                 obj.setLon(pointLon);
+               //obj.setPhotoList(mPhotoList_byte);
                 realm.commitTransaction();
                 realm.close();
                 finish();
@@ -149,6 +153,17 @@ public class PhotoMainActivity extends AppCompatActivity {
                     mPhotoList_img.add(photo);
                     storeCropImage(photo, filePath);
                     absolutePath = filePath;
+
+//                    int size = photo.getRowBytes() * photo.getHeight();
+//                    ByteBuffer b = ByteBuffer.allocate(size);
+//                    photo.copyPixelsFromBuffer(b);
+//                    byte[] bytes = new byte[size];
+//                    mPhotoList_byte.add(bytes);
+//                    try {
+//                        b.get(bytes, 0, bytes.length);
+//                    } catch (BufferUnderflowException e) {
+//                    }
+
                     break;
                 }
                 File f = new File(mImageCaptureUri.getPath());
