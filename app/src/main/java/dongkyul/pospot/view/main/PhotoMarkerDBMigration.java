@@ -1,8 +1,13 @@
 //package dongkyul.pospot.view.main;
 //
+//import java.util.UUID;
+//
 //import io.realm.DynamicRealm;
+//import io.realm.DynamicRealmObject;
 //import io.realm.FieldAttribute;
+//import io.realm.RealmList;
 //import io.realm.RealmMigration;
+//import io.realm.RealmObjectSchema;
 //import io.realm.RealmSchema;
 //
 //public class PhotoMarkerDBMigration implements RealmMigration {
@@ -20,9 +25,14 @@
 //        //     // getters and setters left out for brevity
 //        // }
 //        if (oldVersion == 0) {
-//            schema.create("Person")
-//                    .addField("name", String.class)
-//                    .addField("age", int.class);
+//            RealmObjectSchema mPhotoMarkerDBSchema = schema.get("PhotoMarkerDB");
+//            mPhotoMarkerDBSchema.addField("photoList", RealmList.class, FieldAttribute.REQUIRED)
+//                    .transform(new RealmObjectSchema.Function() {
+//                        @Override
+//                        public void apply(DynamicRealmObject obj) {
+//                            obj.set("photoList", UUID.randomUUID().toString());
+//                        }
+//                    });
 //            oldVersion++;
 //        }
 //
@@ -36,12 +46,13 @@
 //        //     private RealmList<Dog> dogs;
 //        //     // getters and setters left out for brevity
 //        // }
-//        if (oldVersion == 1) {
-//            schema.get("Person")
-//                    .addField("id", long.class, FieldAttribute.PRIMARY_KEY)
-//                    .addRealmObjectField("favoriteDog", schema.get("Dog"))
-//                    .addRealmListField("dogs", schema.get("Dog"));
-//            oldVersion++;
+////        if (oldVersion == 1) {
+////            schema.get("Person")
+////                    .addField("id", long.class, FieldAttribute.PRIMARY_KEY)
+////                    .addRealmObjectField("favoriteDog", schema.get("Dog"))
+////                    .addRealmListField("dogs", schema.get("Dog"));
+////            oldVersion++;
+//
 //        }
 //    }
 //}

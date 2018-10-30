@@ -15,14 +15,15 @@ public class PhotoMarkerDB extends RealmObject {
     private String title;
     private double lat;
     private double lon;
-//    private RealmList<byte[]> photoList;
+    private RealmList<byte[]> photoList;
 
     @Override
     public String toString() {
         return "PhotoMarker {" +
                 "title='" + title + '\'' +
                 ", lat='" + lat + '\'' +
-                ", lon=" + lon +
+                ", lon=" + lon + '\'' +
+                ", photoList=" + photoList.get(0) +
                 '}';
     }
 
@@ -46,12 +47,12 @@ public class PhotoMarkerDB extends RealmObject {
     public void setLon(double lon) {
         this.lon = lon;
     }
-//
-//    public RealmList<byte[]>getPhotoList() {
-//        return photoList;
-//    }
-//    public void setPhotoList(RealmList<byte[]> photoList) {
-//        this.photoList = photoList;
-//    }
+
+    public RealmList<byte[]> getPhotoList() {
+        return photoList;
+    }
+    public void setPhotoList(RealmList<byte[]> photoList) {
+        this.photoList = photoList;
+    }
 }
 

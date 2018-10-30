@@ -8,13 +8,16 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +69,7 @@ public class PhotoMainActivity extends BaseActivity {
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMainActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mPhotoList_img = new ArrayList<Bitmap>();
-        mPhotoList_byte = new RealmList<>();
+        mPhotoList_byte = new RealmList<byte[]>();
         myAdapter = new PhotoMyAdapter(PhotoMainActivity.this, mPhotoList_img, pickFromCameraListener);
         mRecyclerView.setAdapter(myAdapter);
 
@@ -88,8 +91,7 @@ public class PhotoMainActivity extends BaseActivity {
         });
 
         Realm.init(this);
-        RealmConfiguration config = new RealmConfiguration.Builder().build();
-//        Realm.setDefaultConfiguration(realmConfiguration);
+        RealmConfiguration config = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build();
 //        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoMarkerDB").deleteRealmIfMigrationNeeded().build();
         realm = Realm.getInstance(config);
 
@@ -102,7 +104,8 @@ public class PhotoMainActivity extends BaseActivity {
                 obj.setTitle(textTitle.getText().toString());
                 obj.setLat(pointLat);
                 obj.setLon(pointLon);
-               //obj.setPhotoList(mPhotoList_byte);
+                obj.setPhotoList(mPhotoList_byte);
+//                Log.e("c:::mPhotoList_byte:::", String.valueOf(mPhotoList_byte)); // RealmList<?>@[byte[20036],byte[38510]]
                 realm.commitTransaction();
                 realm.close();
                 finish();
@@ -150,10 +153,11 @@ public class PhotoMainActivity extends BaseActivity {
                 String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pospot/"+System.currentTimeMillis()+".jpg";
                 if(extras!=null) {
                     Bitmap photo = extras.getParcelable("data");
+
                     mPhotoList_img.add(photo);
                     storeCropImage(photo, filePath);
                     absolutePath = filePath;
-
+//
 //                    int size = photo.getRowBytes() * photo.getHeight();
 //                    ByteBuffer b = ByteBuffer.allocate(size);
 //                    photo.copyPixelsFromBuffer(b);
@@ -162,7 +166,15 @@ public class PhotoMainActivity extends BaseActivity {
 //                    try {
 //                        b.get(bytes, 0, bytes.length);
 //                    } catch (BufferUnderflowException e) {
+//                        Log.e("error","error");
 //                    }
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    //Log.e("byteArray :::", String.valueOf(byteArray));
+                    mPhotoList_byte.add(byteArray);
+                    //Log.e("mPhotoList_byte:::", String.valueOf(mPhotoList_byte));
 
                     break;
                 }
