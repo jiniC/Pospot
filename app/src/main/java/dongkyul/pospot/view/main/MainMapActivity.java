@@ -1,29 +1,25 @@
 package dongkyul.pospot.view.main;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.gun0912.tedpermission.PermissionListener;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
@@ -32,6 +28,7 @@ import com.skt.Tmap.TMapView;
 import java.util.ArrayList;
 
 import dongkyul.pospot.R;
+import dongkyul.pospot.utils.PermissionUtils;
 import dongkyul.pospot.view.common.BaseActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,10 +37,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainMapActivity extends BaseActivity {
-    private Context context = null;
     public TMapView tMapView;
     public Button btnSet;
-    public Button btnMyLocation;
+    public Button myLocationButton;
 
     private static int mMarkerID;
     private ArrayList<String> mArrayMarkerID = new ArrayList<String>();
@@ -54,12 +50,6 @@ public class MainMapActivity extends BaseActivity {
     float tourItemMapLon;
     String tourItemTitle;
 
-    private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
-    private final int PERMISSIONS_ACCESS_COARSE_LOCATION = 1001;
-    private boolean isAccessFineLocation = false;
-    private boolean isAccessCoarseLocation = false;
-    private boolean isPermission = false;
-
     private GpsInfo gps;
 
     @Override
@@ -67,14 +57,6 @@ public class MainMapActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
         init();
-        btnMyLocation.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                // to-be
-                // 관광 데이터 있는데 한번 더 누르면 뜨는 오류 해결하기
-                loadPosition();
-            }
-        });
 
     }
 
@@ -84,10 +66,25 @@ public class MainMapActivity extends BaseActivity {
         ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.layout);
         tMapView = (TMapView)findViewById(R.id.tmapView);
         btnSet = (Button) findViewById(R.id.btnSet);
-        btnMyLocation = (Button) findViewById(R.id.btnMyLocation);
+        myLocationButton = (Button) findViewById(R.id.btnMyLocation);
+        myLocationButton.setOnClickListener(this);
         addMapView();
-        callPermission();
-        loadPosition();
+        PermissionListener locationPermissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                loadPosition();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(getApplicationContext(),"위치 정보 로드 권한이 없습니다", Toast.LENGTH_LONG);
+            }
+        };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PermissionUtils.checkLocationPermission(this, locationPermissionListener);
+        }else{
+            loadPosition();
+        }
 
         // getZoomLevel
         Thread t = new Thread(new Runnable() {
@@ -119,12 +116,6 @@ public class MainMapActivity extends BaseActivity {
     }
 
     public void loadPosition(){
-
-        if (!isPermission) {
-            callPermission();
-            return;
-        }
-
         try {
             gps = new GpsInfo(MainMapActivity.this);
 
@@ -266,21 +257,26 @@ public class MainMapActivity extends BaseActivity {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful()){
-                    JsonObject body = response.body();
-                    Gson gson = new GsonBuilder().serializeNulls().create();
-                    ResponseContainer tourList = gson.fromJson(body, new TypeToken<ResponseContainer>() {}.getType());
+                    try{
+                        JsonObject body = response.body();
+                        Gson gson = new GsonBuilder().serializeNulls().create();
+                        ResponseContainer tourList = gson.fromJson(body, new TypeToken<ResponseContainer>() {
+                        }.getType());
 
-                    for (int i=0; i < tourList.response.body.items.item.size(); i++) {
-                        tourItemContenttypeid = String.valueOf(tourList.response.body.items.item.get(i).contenttypeid);
-                        tourItemMapLat = (float) tourList.response.body.items.item.get(i).mapy; // latitude
-                        tourItemMapLon = (float) tourList.response.body.items.item.get(i).mapx; // longitude
-                        tourItemTitle = tourList.response.body.items.item.get(i).title;
-                        m_mapMarkerItem.add(new TMapMarkerItem());
-                        m_mapMarkerItem.get(i).setTMapPoint(new TMapPoint(tourItemMapLat, tourItemMapLon));
-                        m_mapMarkerItem.get(i).setName(tourItemTitle);
-                        m_mapMarkerItem.get(i).setCalloutSubTitle(String.valueOf(tourItemContenttypeid));
+                        for (int i = 0; i < tourList.response.body.items.item.size(); i++) {
+                            tourItemContenttypeid = String.valueOf(tourList.response.body.items.item.get(i).contenttypeid);
+                            tourItemMapLat = (float) tourList.response.body.items.item.get(i).mapy; // latitude
+                            tourItemMapLon = (float) tourList.response.body.items.item.get(i).mapx; // longitude
+                            tourItemTitle = tourList.response.body.items.item.get(i).title;
+                            m_mapMarkerItem.add(new TMapMarkerItem());
+                            m_mapMarkerItem.get(i).setTMapPoint(new TMapPoint(tourItemMapLat, tourItemMapLon));
+                            m_mapMarkerItem.get(i).setName(tourItemTitle);
+                            m_mapMarkerItem.get(i).setCalloutSubTitle(String.valueOf(tourItemContenttypeid));
+                        }
                     }
-
+                    catch(Exception e){
+                        Log.e("e",e.toString());
+                    }
                     showMarkerPoint();
                 }
             }
@@ -293,43 +289,14 @@ public class MainMapActivity extends BaseActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        if (requestCode == PERMISSIONS_ACCESS_FINE_LOCATION
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            isAccessFineLocation = true;
-        } else if (requestCode == PERMISSIONS_ACCESS_COARSE_LOCATION
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            isAccessCoarseLocation = true;
-        }
-        if (isAccessFineLocation && isAccessCoarseLocation) {
-            isPermission = true;
-        }
-    }
-
-    private void callPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_ACCESS_FINE_LOCATION);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-                    requestPermissions(
-                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                            PERMISSIONS_ACCESS_COARSE_LOCATION);
-        } else {
-            isPermission = true;
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()){
-
+            case R.id.btnMyLocation:
+                // to-be
+                // 관광 데이터 있는데 한번 더 누르면 뜨는 오류 해결하기
+                loadPosition();
+                break;
         }
     }
 

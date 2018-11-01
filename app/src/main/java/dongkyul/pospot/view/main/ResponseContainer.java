@@ -10,6 +10,10 @@ public class ResponseContainer {
         Body body;
         Header header;
 
+        public class Header {
+            int resultCode;
+            String resultMsg;
+        }
         public class Body {
 
             Items items;
@@ -43,11 +47,6 @@ public class ResponseContainer {
                     public String tel;
                 }
             }
-        }
-
-        public class Header {
-            int resultCode;
-            String resultMsg;
         }
     }
 }

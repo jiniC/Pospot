@@ -8,7 +8,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,8 +16,6 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,8 +87,7 @@ public class PhotoMainActivity extends BaseActivity {
             }
         });
 
-        Realm.init(this);
-        RealmConfiguration config = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build();
+        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").deleteRealmIfMigrationNeeded().build();
 //        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoMarkerDB").deleteRealmIfMigrationNeeded().build();
         realm = Realm.getInstance(config);
 

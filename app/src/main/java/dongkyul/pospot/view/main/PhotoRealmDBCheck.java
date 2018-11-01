@@ -1,13 +1,12 @@
 package dongkyul.pospot.view.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import dongkyul.pospot.R;
 import dongkyul.pospot.view.common.BaseActivity;
 import io.realm.Realm;
-import io.realm.RealmResults;
+import io.realm.RealmConfiguration;
 
 public class PhotoRealmDBCheck extends BaseActivity {
 
@@ -18,17 +17,23 @@ public class PhotoRealmDBCheck extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_db);
         tvMarkerTitle = (TextView)findViewById(R.id.tvMarkerTitle);
-
-        Realm.init(this);
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<PhotoMarkerDB> results = realm.where(PhotoMarkerDB.class).findAllAsync();
-        results.load();
+        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").build();
+        Realm realm = Realm.getInstance(config);
+        PhotoMarkerDB result = realm.where(PhotoMarkerDB.class).findFirst();
         String output="";
-        for(PhotoMarkerDB photoMarkerDB:results){
-            output += photoMarkerDB.toString();
+        for(byte[] bytes:result.getPhotoList()){
+            output+=toString(result,bytes);
         }
         tvMarkerTitle.setText(output);
         realm.close();
     }
 
+    public String toString(PhotoMarkerDB result, byte[] bytes) {
+        return "PhotoMarker {" +
+                "title='" + result.getTitle() + '\'' +
+                ", lat='" + result.getLat() + '\'' +
+                ", lon=" + result.getLon() + '\'' +
+                ", photoList=" + bytes +
+                '}';
+    }
 }
