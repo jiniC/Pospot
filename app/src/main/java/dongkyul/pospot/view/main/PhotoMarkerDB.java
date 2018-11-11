@@ -1,12 +1,7 @@
 package dongkyul.pospot.view.main;
 
-import android.graphics.Bitmap;
-
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 // 포토마커 객체 배열 { 타이틀, lat, lon, 키값은 마커아이디?, 대표이미지, [이미지 리스트] }
 
@@ -19,12 +14,20 @@ public class PhotoMarkerDB extends RealmObject {
 
     @Override
     public String toString() {
+        String photoByteArray="[";
+        for(byte[] photoByte:photoList){ //photolist에서 photo의 byte array를 하나씩 가져옴
+            photoByteArray+=photoByte; //photo 각각의 byte array를 붙임
+            photoByteArray+=",";
+        }
+        photoByteArray+="]";
+
         return "PhotoMarker {" +
                 "title='" + title + '\'' +
                 ", lat='" + lat + '\'' +
                 ", lon=" + lon + '\'' +
-                ", photoList=" + photoList.get(0) +
-                '}';
+                ", photoList=" + photoByteArray +
+                '}'; //photomarker에 속한 모든 photo들이 phtolist안에 bytearray로 들어있는 photo marker string 생성
+
     }
 
     public String getTitle() {
