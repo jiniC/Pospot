@@ -1,29 +1,35 @@
 package dongkyul.pospot.view.main;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import dongkyul.pospot.R;
 import dongkyul.pospot.view.common.BaseActivity;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+
+import static android.graphics.BitmapFactory.decodeByteArray;
 
 public class PhotoMarkerActivity extends BaseActivity {
 
     RecyclerView mRecyclerView;
     PhotoMarkerAdapter myAdapter;
     List<Bitmap> mPhotoList_img;
+    RealmList<byte[]> mPhotoList_byte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // 넘어온 lat, lon 값으로 MarkerDB 객체 찾고
-        // -> 거기에 사진리스트들 찾고
-        // -> 그걸 리사이클 어댑터로 넘겨줌
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_marker);
 
@@ -32,14 +38,32 @@ public class PhotoMarkerActivity extends BaseActivity {
         Double photoMarkerLat = extras.getDouble("photoMarkerLat");
         Double photoMarkerLon = extras.getDouble("photoMarkerLon");
 
-        Log.e("photoMarkerLat :: ", String.valueOf(photoMarkerLat));
-        Log.e("photoMarkerLon :: ", String.valueOf(photoMarkerLon));
+        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").build();
+        Realm realm = Realm.getInstance(config);
 
-//        mPhotoList_img = new ArrayList<Bitmap>();
-//        mRecyclerView = findViewById(R.id.recyclerview);
-//        GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMarkerActivity.this, 2);
-//        mRecyclerView.setLayoutManager(mGridLayoutManager);
-//        myAdapter = new PhotoMarkerAdapter(PhotoMarkerActivity.this, mPhotoList_img);
-//        mRecyclerView.setAdapter(myAdapter);
+
+        PhotoMarkerDB clickPhotoMarker;
+        clickPhotoMarker = realm.where(PhotoMarkerDB.class)
+                                                   .equalTo("lat", photoMarkerLat)
+                                                   .and()
+                                                   .equalTo("lon", photoMarkerLon)
+                                                   .findFirst();
+        // Log.e("results ::: ", String.valueOf(clickPhotoMarker));
+
+        mPhotoList_img = new ArrayList<Bitmap>();
+        mPhotoList_byte = new RealmList<byte[]>();
+        mPhotoList_byte = clickPhotoMarker.getPhotoList();
+        // Log.e("mPhotoList_byte", String.valueOf(mPhotoList_byte)); // RealmList<byte[]>@[byte[57800]]
+        // byte -> bitmap
+        for(byte[] mPhoto_byte : mPhotoList_byte) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(mPhoto_byte, 0, mPhoto_byte.length);
+            mPhotoList_img.add(bitmap);
+        }
+
+        mRecyclerView = findViewById(R.id.recyclerview);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMarkerActivity.this, 2);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        myAdapter = new PhotoMarkerAdapter(PhotoMarkerActivity.this, mPhotoList_img);
+        mRecyclerView.setAdapter(myAdapter);
     }
 }
