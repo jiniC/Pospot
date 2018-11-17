@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -88,24 +89,25 @@ public class PhotoMainActivity extends BaseActivity {
         });
 
         RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").deleteRealmIfMigrationNeeded().build();
-//        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoMarkerDB").deleteRealmIfMigrationNeeded().build();
         realm = Realm.getInstance(config);
 
         btnMarkerCreate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PhotoMainActivity.this,PhotoRealmDBCheck.class);
                 realm.beginTransaction();
                 PhotoMarkerDB obj = realm.createObject(PhotoMarkerDB.class);
                 obj.setTitle(textTitle.getText().toString());
                 obj.setLat(pointLat);
                 obj.setLon(pointLon);
                 obj.setPhotoList(mPhotoList_byte);
-//                Log.e("c:::mPhotoList_byte:::", String.valueOf(mPhotoList_byte)); // RealmList<?>@[byte[20036],byte[38510]]
                 realm.commitTransaction();
                 realm.close();
                 finish();
-                startActivity(intent);
+                // -> 대표이미지 설정 페이지로 넘어감. lat, lon넘겨줌 (obj에 대표이미지 설정하고 마커생성)
+                Intent markerIntent = new Intent(PhotoMainActivity.this, PhotoMarkerActivity.class);
+                markerIntent.putExtra("photoMarkerLat", pointLat);
+                markerIntent.putExtra("photoMarkerLon", pointLon);
+                startActivity(markerIntent);
             }
         });
     }
@@ -149,29 +151,13 @@ public class PhotoMainActivity extends BaseActivity {
                 String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pospot/"+System.currentTimeMillis()+".jpg";
                 if(extras!=null) {
                     Bitmap photo = extras.getParcelable("data");
-
                     mPhotoList_img.add(photo);
                     storeCropImage(photo, filePath);
                     absolutePath = filePath;
-//
-//                    int size = photo.getRowBytes() * photo.getHeight();
-//                    ByteBuffer b = ByteBuffer.allocate(size);
-//                    photo.copyPixelsFromBuffer(b);
-//                    byte[] bytes = new byte[size];
-//                    mPhotoList_byte.add(bytes);
-//                    try {
-//                        b.get(bytes, 0, bytes.length);
-//                    } catch (BufferUnderflowException e) {
-//                        Log.e("error","error");
-//                    }
-
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
-                    //Log.e("byteArray :::", String.valueOf(byteArray));
                     mPhotoList_byte.add(byteArray);
-                    //Log.e("mPhotoList_byte:::", String.valueOf(mPhotoList_byte));
-
                     break;
                 }
                 File f = new File(mImageCaptureUri.getPath());

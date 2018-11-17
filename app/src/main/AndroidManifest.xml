@@ -33,6 +33,7 @@
 
         <activity android:name=".view.main.PhotoMainActivity"></activity>
         <activity android:name=".view.main.PhotoDetailActivity"></activity>
+        <activity android:name=".view.main.PhotoMarkerActivity"></activity>
     </application>
 
 </manifest>

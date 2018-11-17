@@ -3,7 +3,7 @@ package dongkyul.pospot.view.main;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
-// 포토마커 객체 배열 { 타이틀, lat, lon, 키값은 마커아이디?, 대표이미지, [이미지 리스트] }
+// 포토마커 객체 배열 { 타이틀, lat, lon, [이미지 리스트], 대표이미지, 마커아이디? }
 
 public class PhotoMarkerDB extends RealmObject {
 //    @PrimaryKey
@@ -21,7 +21,7 @@ public class PhotoMarkerDB extends RealmObject {
         }
         photoByteArray+="]";
 
-        return "PhotoMarker {" +
+        return "PhotoMarkerActivity {" +
                 "title='" + title + '\'' +
                 ", lat='" + lat + '\'' +
                 ", lon=" + lon + '\'' +
