@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dongkyul.pospot.R;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 
 public class PhotoMarkerAdapter extends RecyclerView.Adapter<PhotoMarkerAdapter.PhotoMarkerViewHolder> {
@@ -20,10 +22,13 @@ public class PhotoMarkerAdapter extends RecyclerView.Adapter<PhotoMarkerAdapter.
     private Context mContext;
 
     List<Bitmap> mPhotoList_img = new ArrayList<Bitmap>();
+    PhotoMarkerDB clickPhotoMarker;
+    Realm realm;
 
-    public PhotoMarkerAdapter(Context mContext, List<Bitmap> mPhotoList_img) {
+    public PhotoMarkerAdapter(Context mContext, List<Bitmap> mPhotoList_img, PhotoMarkerDB clickPhotoMarker) {
         this.mContext = mContext;
         this.mPhotoList_img = mPhotoList_img;
+        this.clickPhotoMarker = clickPhotoMarker;
     }
 
     @Override
@@ -34,10 +39,25 @@ public class PhotoMarkerAdapter extends RecyclerView.Adapter<PhotoMarkerAdapter.
     }
 
     @Override
-    public void onBindViewHolder(PhotoMarkerViewHolder holder, int position) {
-        Log.e("onBindViewHolder ::: ", String.valueOf(mPhotoList_img.get(position)));
-        Log.e("position ::: ", String.valueOf(position));
+    public void onBindViewHolder(PhotoMarkerViewHolder holder, final int position) {
         holder.mPhoto.setImageBitmap(mPhotoList_img.get(position));
+        holder.mPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // to-be
+                // 클릭한 사진의 index값을 clickPhotoMarker의 titleIndex값에 넣어주기
+//                RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").deleteRealmIfMigrationNeeded().build();
+//                realm = Realm.getInstance(config);
+//                realm.beginTransaction();
+//                clickPhotoMarker.setTitleIndex(position);
+                Log.e("title ::: ", String.valueOf(clickPhotoMarker.getTitle()));
+                Log.e("lat ::: ", String.valueOf(clickPhotoMarker.getLat()));
+                Log.e("lon ::: ", String.valueOf(clickPhotoMarker.getLon()));
+                Log.e("TitleIndex ::: ", String.valueOf(clickPhotoMarker.getTitleIndex()));
+//                realm.commitTransaction();
+//                realm.close();
+            }
+        });
     }
 
     @Override

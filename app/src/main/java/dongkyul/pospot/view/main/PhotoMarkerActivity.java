@@ -63,7 +63,7 @@ public class PhotoMarkerActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.recyclerview);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMarkerActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
-        myAdapter = new PhotoMarkerAdapter(PhotoMarkerActivity.this, mPhotoList_img);
+        myAdapter = new PhotoMarkerAdapter(PhotoMarkerActivity.this, mPhotoList_img, clickPhotoMarker);
         mRecyclerView.setAdapter(myAdapter);
     }
 }
