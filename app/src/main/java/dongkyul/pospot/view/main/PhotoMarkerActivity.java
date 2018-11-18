@@ -48,7 +48,6 @@ public class PhotoMarkerActivity extends BaseActivity {
                                                    .and()
                                                    .equalTo("lon", photoMarkerLon)
                                                    .findFirst();
-        // Log.e("results ::: ", String.valueOf(clickPhotoMarker));
 
         mPhotoList_img = new ArrayList<Bitmap>();
         mPhotoList_byte = new RealmList<byte[]>();
@@ -63,7 +62,7 @@ public class PhotoMarkerActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.recyclerview);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMarkerActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
-        myAdapter = new PhotoMarkerAdapter(PhotoMarkerActivity.this, mPhotoList_img, clickPhotoMarker);
+        myAdapter = new PhotoMarkerAdapter(PhotoMarkerActivity.this, mPhotoList_img, config, clickPhotoMarker);
         mRecyclerView.setAdapter(myAdapter);
     }
 }

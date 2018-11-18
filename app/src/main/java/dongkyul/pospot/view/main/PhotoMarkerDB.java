@@ -12,7 +12,7 @@ public class PhotoMarkerDB extends RealmObject {
     private double lat;
     private double lon;
     private RealmList<byte[]> photoList;
-    private int titleIndex;
+    private int titleIndex = 5;
 
     @Override
     public String toString() {
