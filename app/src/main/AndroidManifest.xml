@@ -28,11 +28,20 @@
         <activity android:name=".view.main.FilterListActivity" />
         <activity android:name=".view.main.CrawlingApiTestActivity" />
         <activity android:name=".view.main.MainMapActivity" />
+<<<<<<< HEAD
         <activity android:name=".view.main.TagRankActivity" />
         <activity android:name=".view.main.PhotoRealmDBCheck" />
         <activity android:name=".view.main.PhotoMainActivity" />
         <activity android:name=".view.main.PhotoDetailActivity" />
         <activity android:name=".view.main.RecommendedPlacesActivity"></activity>
+=======
+        <activity android:name=".view.main.TagRankActivity"></activity>
+        <activity android:name=".view.main.PhotoRealmDBCheck"></activity>
+
+        <activity android:name=".view.main.PhotoMainActivity"></activity>
+        <activity android:name=".view.main.PhotoDetailActivity"></activity>
+        <activity android:name=".view.main.PhotoMarkerActivity"></activity>
+>>>>>>> 909abb4919f8ce5eae0ccd4108a0155c7b52ab52
     </application>
 
 </manifest>
