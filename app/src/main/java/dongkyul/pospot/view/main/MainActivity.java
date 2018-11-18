@@ -17,7 +17,7 @@ public class MainActivity extends BaseActivity {
 
         Button btnMyTour = (Button) findViewById(R.id.btnMyTour);
         Button btnMain = (Button) findViewById(R.id.btnMain);
-;
+
 //        btnMyTour.setOnClickListener(new View.OnClickListener(){
 //            @Override
 //            public void onClick(View v) {
