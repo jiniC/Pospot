@@ -6,9 +6,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".view.common.MainApplication"
@@ -28,11 +28,11 @@
         <activity android:name=".view.main.FilterListActivity" />
         <activity android:name=".view.main.CrawlingApiTestActivity" />
         <activity android:name=".view.main.MainMapActivity" />
-        <activity android:name=".view.main.TagRankActivity"></activity>
-        <activity android:name=".view.main.PhotoRealmDBCheck"></activity>
-
-        <activity android:name=".view.main.PhotoMainActivity"></activity>
-        <activity android:name=".view.main.PhotoDetailActivity"></activity>
+        <activity android:name=".view.main.TagRankActivity" />
+        <activity android:name=".view.main.PhotoRealmDBCheck" />
+        <activity android:name=".view.main.PhotoMainActivity" />
+        <activity android:name=".view.main.PhotoDetailActivity" />
+        <activity android:name=".view.main.RecommendedPlacesActivity"></activity>
     </application>
 
 </manifest>

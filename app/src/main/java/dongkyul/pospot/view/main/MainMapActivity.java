@@ -44,11 +44,13 @@ public class MainMapActivity extends BaseActivity {
     private static int mMarkerID;
     private ArrayList<String> mArrayMarkerID = new ArrayList<String>();
     private ArrayList<TMapMarkerItem> m_mapMarkerItem = new ArrayList<TMapMarkerItem>();
+    ArrayList<String> attraction;
 
     String tourItemContenttypeid;
     float tourItemMapLat;
     float tourItemMapLon;
     String tourItemTitle;
+    Button recommendButton;
 
     private GpsInfo gps;
 
@@ -68,6 +70,7 @@ public class MainMapActivity extends BaseActivity {
         btnSet = (Button) findViewById(R.id.btnSet);
         myLocationButton = (Button) findViewById(R.id.btnMyLocation);
         myLocationButton.setOnClickListener(this);
+        recommendButton = (Button)findViewById(R.id.btnRecommend);
         addMapView();
         PermissionListener locationPermissionListener = new PermissionListener() {
             @Override
@@ -194,7 +197,8 @@ public class MainMapActivity extends BaseActivity {
         });
     }
 
-    public void showMarkerPoint() {
+    public void showMarkerPoint() { //attraction 배열에 관광지목록만 따로 추가하는 역할도 함
+        attraction = new ArrayList<>();
         for(int i=0; i < m_mapMarkerItem.size(); i++) {
             TMapPoint point = m_mapMarkerItem.get(i).getTMapPoint();
             TMapMarkerItem item1 = new TMapMarkerItem();
@@ -205,6 +209,7 @@ public class MainMapActivity extends BaseActivity {
                 case 12:
                     // 관광지
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_12);
+                    attraction.add(m_mapMarkerItem.get(i).getName());
                     break;
                 case 14:
                     // 문화시설
@@ -278,6 +283,14 @@ public class MainMapActivity extends BaseActivity {
                         Log.e("e",e.toString());
                     }
                     showMarkerPoint();
+                    recommendButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent =  new Intent(MainMapActivity.this,RecommendedPlacesActivity.class);
+                            intent.putStringArrayListExtra("attractions",attraction);
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
 
