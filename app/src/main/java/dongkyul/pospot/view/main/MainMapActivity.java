@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import dongkyul.pospot.R;
 import dongkyul.pospot.utils.PermissionUtils;
 import dongkyul.pospot.view.common.BaseActivity;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -116,6 +119,8 @@ public class MainMapActivity extends BaseActivity {
                 }
             }
         });
+
+        showPhotoMarker();
     }
 
     public void loadPosition(){
@@ -339,4 +344,23 @@ public class MainMapActivity extends BaseActivity {
 
         alertDialog.show();
     }
+
+    public void showPhotoMarker() {
+        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").build();
+        Realm realm = Realm.getInstance(config);
+        RealmResults<PhotoMarkerDB> results = realm.where(PhotoMarkerDB.class).findAll();
+        String output="";
+        for(PhotoMarkerDB result:results) {
+            output+=result.toString();
+            output+="\n";
+        }
+
+        Log.e("output ::: ", output);
+        realm.close();
+
+        // to-be
+        // 대표이미지들로 포토마커 찍기
+    }
+
+
 }

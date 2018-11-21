@@ -24,11 +24,13 @@ public class PhotoMarkerAdapter extends RecyclerView.Adapter<PhotoMarkerAdapter.
     List<Bitmap> mPhotoList_img = new ArrayList<Bitmap>();
     PhotoMarkerDB clickPhotoMarker;
     Realm realm;
+    RealmConfiguration realmConfig;
 
-    public PhotoMarkerAdapter(Context mContext, List<Bitmap> mPhotoList_img, PhotoMarkerDB clickPhotoMarker) {
+    public PhotoMarkerAdapter(Context mContext, List<Bitmap> mPhotoList_img, RealmConfiguration config, PhotoMarkerDB clickPhotoMarker) {
         this.mContext = mContext;
         this.mPhotoList_img = mPhotoList_img;
         this.clickPhotoMarker = clickPhotoMarker;
+        this.realmConfig = config;
     }
 
     @Override
@@ -45,16 +47,22 @@ public class PhotoMarkerAdapter extends RecyclerView.Adapter<PhotoMarkerAdapter.
             @Override
             public void onClick(View view) {
                 // to-be
-                // 클릭한 사진의 index값을 clickPhotoMarker의 titleIndex값에 넣어주기
-//                RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").deleteRealmIfMigrationNeeded().build();
-//                realm = Realm.getInstance(config);
+                realm = Realm.getInstance(realmConfig);
+                realm.beginTransaction();
+                clickPhotoMarker.setTitleIndex(position);
+                realm.commitTransaction();
+                realm.close();
 //                realm.beginTransaction();
-//                clickPhotoMarker.setTitleIndex(position);
-                Log.e("title ::: ", String.valueOf(clickPhotoMarker.getTitle()));
-                Log.e("lat ::: ", String.valueOf(clickPhotoMarker.getLat()));
-                Log.e("lon ::: ", String.valueOf(clickPhotoMarker.getLon()));
-                Log.e("TitleIndex ::: ", String.valueOf(clickPhotoMarker.getTitleIndex()));
-//                realm.commitTransaction();
+//                PhotoMarkerDB clickPhotoMarker2 = realm.where(PhotoMarkerDB.class)
+//                        .equalTo("lat", clickPhotoMarker.getLat())
+//                        .and()
+//                        .equalTo("lon", clickPhotoMarker.getLon())
+//                        .findFirst();
+//
+//                Log.e("title ::: ", String.valueOf(clickPhotoMarker2.getTitle()));
+//                Log.e("lat ::: ", String.valueOf(clickPhotoMarker2.getLat()));
+//                Log.e("lon ::: ", String.valueOf(clickPhotoMarker2.getLon()));
+//                Log.e("TitleIndex ::: ", String.valueOf(clickPhotoMarker2.getTitleIndex()));
 //                realm.close();
             }
         });

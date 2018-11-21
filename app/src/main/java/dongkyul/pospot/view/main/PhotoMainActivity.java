@@ -103,7 +103,6 @@ public class PhotoMainActivity extends BaseActivity {
                 realm.commitTransaction();
                 realm.close();
                 finish();
-                // -> 대표이미지 설정 페이지로 넘어감. lat, lon넘겨줌 (obj에 대표이미지 설정하고 마커생성)
                 Intent markerIntent = new Intent(PhotoMainActivity.this, PhotoMarkerActivity.class);
                 markerIntent.putExtra("photoMarkerLat", pointLat);
                 markerIntent.putExtra("photoMarkerLon", pointLon);

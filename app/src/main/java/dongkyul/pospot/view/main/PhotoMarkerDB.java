@@ -23,12 +23,14 @@ public class PhotoMarkerDB extends RealmObject {
         }
         photoByteArray+="]";
 
+        //photomarker에 속한 모든 photo들이 phtolist안에 bytearray로 들어있는 photo marker string 생성
         return "PhotoMarkerActivity {" +
                 "title='" + title + '\'' +
                 ", lat='" + lat + '\'' +
                 ", lon=" + lon + '\'' +
+                ", titleIndex=" + titleIndex + '\'' +
                 ", photoList=" + photoByteArray +
-                '}'; //photomarker에 속한 모든 photo들이 phtolist안에 bytearray로 들어있는 photo marker string 생성
+                '}';
 
     }
 
