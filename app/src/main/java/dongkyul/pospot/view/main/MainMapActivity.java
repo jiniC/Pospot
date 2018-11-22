@@ -292,6 +292,7 @@ public class MainMapActivity extends BaseActivity {
                         @Override
                         public void onClick(View v) {
                             Intent intent =  new Intent(MainMapActivity.this,RecommendedPlacesActivity.class);
+                            Log.e("S",Integer.toString(attraction.size()));
                             intent.putStringArrayListExtra("attractions",attraction);
                             startActivity(intent);
                         }

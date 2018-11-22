@@ -3,6 +3,7 @@ package dongkyul.pospot.view.main;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -54,14 +55,19 @@ public class RecommendedPlacesActivity extends BaseActivity {
 
 
 
-        for(int i=0;i<5; i++)
-            tagNames.add(receivedTags.get(i));
+        for(int i=0;i<5; i++) {
+            if (i >= receivedTags.size())
+                tagNames.add(null);
+            else
+                tagNames.add(receivedTags.get(i));
+        }
 
         GetTagNumInterface service = retrofit.create(GetTagNumInterface.class);
         Call<JsonObject> request = service.getTagNum(tagNames.get(0),tagNames.get(1),tagNames.get(2),tagNames.get(3),tagNames.get(4)); //아직 거리순으로 정렬된게 아님 - 더 만들어야...
         request.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.e("S",response.body().toString());
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 TagNumResponseContainer container = gson.fromJson(response.body(),TagNumResponseContainer.class);
                 for(TagNumResponseContainer.TagBox t:container.getResult()) {
