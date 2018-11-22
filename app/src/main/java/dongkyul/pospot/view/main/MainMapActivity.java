@@ -346,7 +346,7 @@ public class MainMapActivity extends BaseActivity {
     }
 
     public void showPhotoMarker() {
-        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").build();
+        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").migration(new PhotoMarkerDBMigration()).build();
         Realm realm = Realm.getInstance(config);
         RealmResults<PhotoMarkerDB> results = realm.where(PhotoMarkerDB.class).findAll();
         String output="";

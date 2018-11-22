@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import dongkyul.pospot.R;
@@ -30,18 +29,14 @@ public class AttractionsRecyclerAdapter extends RecyclerView.Adapter<Attractions
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext=parent.getContext();
-        tagNames = new ArrayList<>();
-        tagNums = new ArrayList<>();
         View v = LayoutInflater.from(this.mContext).inflate(R.layout.attractions_recycler_adapter,parent,false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.tagName.setText(tagNames.get(position));
-        if (position<tagNums.size()) {
-            holder.tagNum.setText(tagNums.get(position));
-        }
+        holder.tagName.setText(tagNames.get(position));
+        holder.tagNum.setText(Integer.toString(tagNums.get(position)));
     }
 
     @Override
