@@ -13,7 +13,6 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -32,7 +31,6 @@ import dongkyul.pospot.R;
 import dongkyul.pospot.utils.PermissionUtils;
 import dongkyul.pospot.view.common.BaseActivity;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -51,7 +49,6 @@ public class MainMapActivity extends BaseActivity {
     private ArrayList<String> mArrayMarkerID = new ArrayList<String>();
     private ArrayList<String> mPhotoArrayMarkerID = new ArrayList<String>();
     private ArrayList<TMapMarkerItem> m_mapMarkerItem = new ArrayList<TMapMarkerItem>();
-    ArrayList<String> attraction;
     private ArrayList<TMapMarkerItem> m_mapPhotoMarkerItem = new ArrayList<TMapMarkerItem>();
 
     String tourItemContenttypeid;
@@ -59,6 +56,10 @@ public class MainMapActivity extends BaseActivity {
     float tourItemMapLon;
     String tourItemTitle;
     Button recommendButton;
+
+    //지도 가운데 중심점
+    double centerLat;
+    double centerLon;
 
     private GpsInfo gps;
 
@@ -209,7 +210,6 @@ public class MainMapActivity extends BaseActivity {
     }
 
     public void showMarkerPoint() { //attraction 배열에 관광지목록만 따로 추가하는 역할도 함
-        attraction = new ArrayList<>();
         for(int i=0; i < m_mapMarkerItem.size(); i++) {
             TMapPoint point = m_mapMarkerItem.get(i).getTMapPoint();
             TMapMarkerItem item1 = new TMapMarkerItem();
@@ -220,7 +220,6 @@ public class MainMapActivity extends BaseActivity {
                 case 12:
                     // 관광지
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker12);
-                    attraction.add(m_mapMarkerItem.get(i).getName());
                     break;
                 case 14:
                     // 문화시설
@@ -298,12 +297,17 @@ public class MainMapActivity extends BaseActivity {
                         Log.e("e",e.toString());
                     }
                     showMarkerPoint();
+
+                    //인스타 태그 수 표시창으로 이동
                     recommendButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent =  new Intent(MainMapActivity.this,RecommendedPlacesActivity.class);
-                            Log.e("S",Integer.toString(attraction.size()));
-                            intent.putStringArrayListExtra("attractions",attraction);
+                            TMapPoint centerPoint=tMapView.getCenterPoint();
+                            centerLat=centerPoint.getLatitude();
+                            centerLon=centerPoint.getLongitude();
+                            intent.putExtra("lat",centerLat);
+                            intent.putExtra("lon",centerLon);
                             startActivity(intent);
                         }
                     });
