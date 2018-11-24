@@ -215,36 +215,40 @@ public class MainMapActivity extends BaseActivity {
             TMapMarkerItem item1 = new TMapMarkerItem();
 
             int contenttypeid = Integer.parseInt(m_mapMarkerItem.get(i).getCalloutSubTitle());
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker);
             switch (contenttypeid) {
                 case 12:
                     // 관광지
-                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_12);
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker12);
                     attraction.add(m_mapMarkerItem.get(i).getName());
                     break;
                 case 14:
                     // 문화시설
-                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_14);
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker14);
                     break;
                 case 15:
                     // 축제/공연/행사
-                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_15);
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker15);
                     break;
                 case 25:
                     // 여행코스
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker25);
                     break;
                 case 28:
                     // 레포츠
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker28);
                     break;
                 case 32:
                     // 숙박
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker32);
                     break;
                 case 38:
                     // 쇼핑
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker38);
                     break;
                 case 39:
                     // 음식
-                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mapicon_39);
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker39);
                     break;
                 default:
                     // 기본
@@ -267,8 +271,8 @@ public class MainMapActivity extends BaseActivity {
                 .baseUrl(ApiService.BASEURL)
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
-        // Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000000, 10000,'Y', 'A', "AND", "pospot","json");
-        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000, 1000,'Y', 'A', "AND", "pospot","json");
+        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000000, 1000,'Y', 'A', "AND", "pospot","json");
+//        Call<JsonObject> call = apiService.getTour(mapLon, mapLat,1000, 1000,'Y', 'A', "AND", "pospot","json");
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
