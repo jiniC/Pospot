@@ -13,6 +13,7 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -68,12 +69,6 @@ public class MainMapActivity extends BaseActivity {
         setContentView(R.layout.activity_main_map);
         init();
         Log.e("log", "onCreate test !!");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e("log", "resume test !!");
     }
 
     @Override
@@ -357,11 +352,9 @@ public class MainMapActivity extends BaseActivity {
         alertDialog.show();
     }
 
-    // 처음 앱 실행될때랑, 포터마커저장하고는 config를 넘겨줘야됨...
     public void showPhotoMarker() {
         // to PhotoMarkerDB 들 뽑아서 -> 이미지로 마커 표시
-        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").migration(new PhotoMarkerDBMigration()).build();
-        Realm realm = Realm.getInstance(config);
+        Realm realm = Realm.getDefaultInstance();
         RealmResults<PhotoMarkerDB> results = realm.where(PhotoMarkerDB.class).findAll();
 
         int i=0;
@@ -396,14 +389,5 @@ public class MainMapActivity extends BaseActivity {
         }
 
         realm.close();
-    }
-
-    public void setPhotoMarkerPosition() {
-        // to-be
-        // 대표이미지들로 포토마커 찍기
-//        Intent intent = getIntent();
-//        Bundle extras = intent.getExtras();
-//        boolean setPhotoPoint = extras.getBoolean("setPhotoPoint");
-//        가장 마지막 lat, lon으로 위치 표시
     }
 }

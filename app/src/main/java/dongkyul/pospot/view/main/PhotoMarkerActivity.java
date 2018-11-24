@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +41,10 @@ public class PhotoMarkerActivity extends BaseActivity {
         Double photoMarkerLat = extras.getDouble("photoMarkerLat");
         Double photoMarkerLon = extras.getDouble("photoMarkerLon");
 
-        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").build();
-        Realm realm = Realm.getInstance(config);
+//        final RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").build();
+//        Realm realm = Realm.getInstance(config);
+
+        Realm realm = Realm.getDefaultInstance();
 
         PhotoMarkerDB clickPhotoMarker;
         clickPhotoMarker = realm.where(PhotoMarkerDB.class)
@@ -62,7 +65,7 @@ public class PhotoMarkerActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.recyclerview);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(PhotoMarkerActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
-        myAdapter = new PhotoMarkerAdapter(PhotoMarkerActivity.this, mPhotoList_img, config, clickPhotoMarker);
+        myAdapter = new PhotoMarkerAdapter(PhotoMarkerActivity.this, mPhotoList_img, clickPhotoMarker);
         mRecyclerView.setAdapter(myAdapter);
 
         btnMarkerCreate = (Button) findViewById(R.id.btnMarkerCreate);

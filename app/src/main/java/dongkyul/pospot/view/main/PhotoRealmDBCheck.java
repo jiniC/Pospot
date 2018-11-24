@@ -18,8 +18,7 @@ public class PhotoRealmDBCheck extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_db);
         tvMarkerTitle = (TextView)findViewById(R.id.tvMarkerTitle);
-        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").build();
-        Realm realm = Realm.getInstance(config);
+        Realm realm = Realm.getDefaultInstance();
         RealmResults<PhotoMarkerDB> results = realm.where(PhotoMarkerDB.class).findAll(); //모든 포토마커 정보를 가져옴
         String output="";
         for(PhotoMarkerDB result:results) { //photomarker별로

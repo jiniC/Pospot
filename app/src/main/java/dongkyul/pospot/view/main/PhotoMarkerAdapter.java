@@ -24,13 +24,11 @@ public class PhotoMarkerAdapter extends RecyclerView.Adapter<PhotoMarkerAdapter.
     List<Bitmap> mPhotoList_img = new ArrayList<Bitmap>();
     PhotoMarkerDB clickPhotoMarker;
     Realm realm;
-    RealmConfiguration realmConfig;
 
-    public PhotoMarkerAdapter(Context mContext, List<Bitmap> mPhotoList_img, RealmConfiguration config, PhotoMarkerDB clickPhotoMarker) {
+    public PhotoMarkerAdapter(Context mContext, List<Bitmap> mPhotoList_img, PhotoMarkerDB clickPhotoMarker) {
         this.mContext = mContext;
         this.mPhotoList_img = mPhotoList_img;
         this.clickPhotoMarker = clickPhotoMarker;
-        this.realmConfig = config;
     }
 
     @Override
@@ -46,24 +44,11 @@ public class PhotoMarkerAdapter extends RecyclerView.Adapter<PhotoMarkerAdapter.
         holder.mPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // to-be
-                realm = Realm.getInstance(realmConfig);
+                realm = Realm.getDefaultInstance();
                 realm.beginTransaction();
                 clickPhotoMarker.setTitleIndex(position);
                 realm.commitTransaction();
                 realm.close();
-//                realm.beginTransaction();
-//                PhotoMarkerDB clickPhotoMarker2 = realm.where(PhotoMarkerDB.class)
-//                        .equalTo("lat", clickPhotoMarker.getLat())
-//                        .and()
-//                        .equalTo("lon", clickPhotoMarker.getLon())
-//                        .findFirst();
-//
-//                Log.e("title ::: ", String.valueOf(clickPhotoMarker2.getTitle()));
-//                Log.e("lat ::: ", String.valueOf(clickPhotoMarker2.getLat()));
-//                Log.e("lon ::: ", String.valueOf(clickPhotoMarker2.getLon()));
-//                Log.e("TitleIndex ::: ", String.valueOf(clickPhotoMarker2.getTitleIndex()));
-//                realm.close();
             }
         });
     }

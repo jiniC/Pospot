@@ -88,8 +88,7 @@ public class PhotoMainActivity extends BaseActivity {
             }
         });
 
-        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").deleteRealmIfMigrationNeeded().build();
-        realm = Realm.getInstance(config);
+        realm = Realm.getDefaultInstance();
 
         btnMarkerCreate.setOnClickListener(new View.OnClickListener(){
             @Override
