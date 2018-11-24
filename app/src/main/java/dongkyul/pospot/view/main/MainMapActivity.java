@@ -32,6 +32,7 @@ import dongkyul.pospot.utils.PermissionUtils;
 import dongkyul.pospot.view.common.BaseActivity;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,9 +46,12 @@ public class MainMapActivity extends BaseActivity {
     public Button myLocationButton;
 
     private static int mMarkerID;
+    private static int mPhotoMarkerID;
     private ArrayList<String> mArrayMarkerID = new ArrayList<String>();
+    private ArrayList<String> mPhotoArrayMarkerID = new ArrayList<String>();
     private ArrayList<TMapMarkerItem> m_mapMarkerItem = new ArrayList<TMapMarkerItem>();
     ArrayList<String> attraction;
+    private ArrayList<TMapMarkerItem> m_mapPhotoMarkerItem = new ArrayList<TMapMarkerItem>();
 
     String tourItemContenttypeid;
     float tourItemMapLat;
@@ -57,12 +61,19 @@ public class MainMapActivity extends BaseActivity {
 
     private GpsInfo gps;
 
+    // activity cycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
         init();
+        Log.e("log", "onCreate test !!");
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("log", "resume test !!");
     }
 
     @Override
@@ -244,7 +255,7 @@ public class MainMapActivity extends BaseActivity {
                     // 기본
                     break;
             }
-            item1.setIcon(bitmap);
+            item1.setIcon(bitmap); // android.graphics.Bitmap@9405e51
             item1.setPosition(0.5f, 1.0f);
             item1.setTMapPoint(point);
             item1.setName(m_mapMarkerItem.get(i).getName());
@@ -346,22 +357,53 @@ public class MainMapActivity extends BaseActivity {
         alertDialog.show();
     }
 
+    // 처음 앱 실행될때랑, 포터마커저장하고는 config를 넘겨줘야됨...
     public void showPhotoMarker() {
+        // to PhotoMarkerDB 들 뽑아서 -> 이미지로 마커 표시
         RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").migration(new PhotoMarkerDBMigration()).build();
         Realm realm = Realm.getInstance(config);
         RealmResults<PhotoMarkerDB> results = realm.where(PhotoMarkerDB.class).findAll();
-        String output="";
-        for(PhotoMarkerDB result:results) {
-            output+=result.toString();
-            output+="\n";
+
+        int i=0;
+        if(results != null) {
+            for(PhotoMarkerDB result:results) {
+                RealmList<byte[]> photoList = result.getPhotoList();
+                int titleIndex = result.getTitleIndex();
+
+                m_mapPhotoMarkerItem.add(new TMapMarkerItem());
+                m_mapPhotoMarkerItem.get(i).setTMapPoint(new TMapPoint(result.getLat(), result.getLon()));
+                m_mapPhotoMarkerItem.get(i).setName(result.getTitle());
+
+                TMapPoint point = m_mapPhotoMarkerItem.get(i).getTMapPoint();
+                TMapMarkerItem item1 = new TMapMarkerItem();
+                // byte -> bitmap
+                if(titleIndex < 0) {
+                    titleIndex = 0;
+                }
+                byte[] titleByte = photoList.get(titleIndex);
+                Bitmap titleBitmap = BitmapFactory.decodeByteArray(titleByte, 0, titleByte.length);
+                item1.setIcon(titleBitmap);
+                item1.setPosition(0.5f, 1.0f);
+                item1.setTMapPoint(point);
+                item1.setName(m_mapPhotoMarkerItem.get(i).getName());
+                item1.setVisible(item1.VISIBLE);
+                String strID = String.format("mymarker%d",mMarkerID++);
+                tMapView.addMarkerItem(strID, item1);
+                mPhotoArrayMarkerID.add(strID);
+
+                i = i + 1;
+            }
         }
 
-        Log.e("output ::: ", output);
         realm.close();
-
-        // to-be
-        // 대표이미지들로 포토마커 찍기
     }
 
-
+    public void setPhotoMarkerPosition() {
+        // to-be
+        // 대표이미지들로 포토마커 찍기
+//        Intent intent = getIntent();
+//        Bundle extras = intent.getExtras();
+//        boolean setPhotoPoint = extras.getBoolean("setPhotoPoint");
+//        가장 마지막 lat, lon으로 위치 표시
+    }
 }

@@ -2,6 +2,7 @@ package dongkyul.pospot.view.main;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.Required;
 
 // 포토마커 객체 배열 { 타이틀, lat, lon, [이미지 리스트], 대표이미지, 마커아이디? }
 
