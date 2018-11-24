@@ -187,7 +187,7 @@ public class MainMapActivity extends BaseActivity {
                             getApplicationContext(),
                             "마커가 클릭됬습니다!\n"+MarkerName,
                             Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainMapActivity.this, CrawlingApiTestActivity.class);
+                    Intent intent = new Intent(MainMapActivity.this, MarkerClickedActivity.class);
                     intent.putExtra("markerName",MarkerName);
                     startActivity(intent);
                 }
@@ -305,7 +305,7 @@ public class MainMapActivity extends BaseActivity {
                             Intent intent =  new Intent(MainMapActivity.this,RecommendedPlacesActivity.class);
                             TMapPoint centerPoint=tMapView.getCenterPoint();
                             centerLat=centerPoint.getLatitude();
-                            centerLon=centerPoint.getLongitude();
+                            centerLon=centerPoint.getLongitude(); //중심점 위치
                             intent.putExtra("lat",centerLat);
                             intent.putExtra("lon",centerLon);
                             startActivity(intent);

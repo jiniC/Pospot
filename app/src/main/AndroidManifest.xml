@@ -26,15 +26,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.main.FilterListActivity" />
-        <activity android:name=".view.main.CrawlingApiTestActivity" />
+        <activity android:name=".view.main.MarkerClickedActivity" />
         <activity android:name=".view.main.MainMapActivity" />
-
         <activity android:name=".view.main.TagRankActivity" />
         <activity android:name=".view.main.PhotoRealmDBCheck" />
         <activity android:name=".view.main.PhotoMainActivity" />
-        <activity android:name=".view.main.RecommendedPlacesActivity"></activity>
-        <activity android:name=".view.main.PhotoMarkerActivity"></activity>
-
+        <activity android:name=".view.main.RecommendedPlacesActivity" />
+        <activity android:name=".view.main.PhotoMarkerActivity" />
+        <activity android:name=".view.main.FilteredCameraActivity"></activity>
     </application>
 
 </manifest>
