@@ -183,13 +183,16 @@ public class MainMapActivity extends BaseActivity {
                     String MarkerID = arrayMapMarkerItem.get(0).getID();
                     TMapMarkerItem markeritem = tMapView.getMarkerItemFromID(String.valueOf(MarkerID));
                     String MarkerName = markeritem.getName();
-                    Toast.makeText(
-                            getApplicationContext(),
-                            "마커가 클릭됬습니다!\n"+MarkerName,
-                            Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainMapActivity.this, MarkerClickedActivity.class);
-                    intent.putExtra("markerName",MarkerName);
-                    startActivity(intent);
+
+                    if (MarkerID.contains("mymarker")) {
+                        Intent intent = new Intent(MainMapActivity.this, PhotoMarkerViewActivity.class);
+//                        intent.putExtra("MarkerID",MarkerID);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(MainMapActivity.this, MarkerClickedActivity.class);
+                        intent.putExtra("markerName",MarkerName);
+                        startActivity(intent);
+                    }
                 }
                 return false;
             }
