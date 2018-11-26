@@ -39,7 +39,7 @@ public class FilterListRecyclerAdapter extends RecyclerView.Adapter<FilterListRe
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext,FilteredCameraActivity.class);
-                intent.putExtra("filter",mPhotoList_img.get(position));
+                intent.putExtra("filterIndex",position);
                 mContext.startActivity(intent);
             }
         });

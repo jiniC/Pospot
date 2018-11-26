@@ -5,7 +5,14 @@
     android:id="@+id/filterbackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:alpha=".3">
+    android:alpha=".5">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        app:srcCompat="@android:color/background_light" />
 
     <ImageButton
         android:id="@+id/filter_capture"

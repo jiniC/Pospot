@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -34,7 +35,7 @@ public class MarkerClickedActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     FilterListRecyclerAdapter myAdapter;
     List<String> urls;
-    List<Bitmap> mPhotoList_img;
+    static List<Bitmap> mPhotoList_img;
     int urlIndex=0;
 
 
@@ -57,6 +58,7 @@ public class MarkerClickedActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.recyclerview);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(MarkerClickedActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
+        LinearLayout filterMenu = (LinearLayout)findViewById(R.id.filterMenu);
         myAdapter = new FilterListRecyclerAdapter(MarkerClickedActivity.this, mPhotoList_img);
         mRecyclerView.setAdapter(myAdapter);
         requestImages();
@@ -82,6 +84,8 @@ public class MarkerClickedActivity extends BaseActivity {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 PhotoResponseContainer container = gson.fromJson(response.body(),PhotoResponseContainer.class);
+                if(container.imgurls==null)
+                    return;
                 String toConcat=container.imgurls.substring(1,container.imgurls.length()-1).replace("\"","");
                 String[] rst=toConcat.split("\\,");
 
@@ -130,5 +134,9 @@ public class MarkerClickedActivity extends BaseActivity {
                 });
             }
         });
+    }
+
+    public static Bitmap getBitmapFilter(int position){
+        return mPhotoList_img.get(position);
     }
 }

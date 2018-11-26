@@ -24,7 +24,8 @@ public class filterDialog extends Dialog implements View.OnClickListener{
         super(context, themeResId);
         setContentView(R.layout.filter);
         ConstraintLayout constraintLayout = findViewById(R.id.filterbackground);
-        //constraintLayout.setBackground
+        ImageView background = (ImageView)findViewById(R.id.background);
+        background.setImageBitmap(MarkerClickedActivity.getBitmapFilter(FilteredCameraActivity.getFilterIndex()));
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         ImageView btnCapture = (ImageView)findViewById(R.id.filter_capture);
         btnCapture.setOnClickListener(this);

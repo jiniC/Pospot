@@ -23,7 +23,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceView;
@@ -41,8 +40,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import dongkyul.pospot.R;
+import dongkyul.pospot.view.common.BaseActivity;
 
-public class FilteredCameraActivity extends AppCompatActivity {
+public class FilteredCameraActivity extends BaseActivity {
 
     public static final int TAKEPICTURE = 1;
     public static final int ZOOM = 2;
@@ -62,11 +62,13 @@ public class FilteredCameraActivity extends AppCompatActivity {
     public static Camera camera;
     Context ctx;
 
+    public static int filterIndex;
+
 
     private final static int PERMISSIONS_REQUEST_CODE = 100;
     // Camera.CameraInfo.CAMERA_FACING_FRONT or Camera.CameraInfo.CAMERA_FACING_BACK
     private final static int CAMERA_FACING = Camera.CameraInfo.CAMERA_FACING_BACK;
-    private AppCompatActivity mActivity;
+    private BaseActivity mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,13 @@ public class FilteredCameraActivity extends AppCompatActivity {
         init();
     }
 
+    public static int getFilterIndex(){
+        return filterIndex;
+    }
+
     public void init() {
+
+        filterIndex=getIntent().getIntExtra("filterIndex",0);
 
         ctx = this;
         mActivity = this;
