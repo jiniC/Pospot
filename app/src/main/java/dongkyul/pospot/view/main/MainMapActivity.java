@@ -145,8 +145,9 @@ public class MainMapActivity extends BaseActivity {
                             Toast.LENGTH_LONG).show();
                     tMapView.setLocationPoint(longitude, latitude);
                     tMapView.setCenterPoint(longitude, latitude);
-
-                    getTourData(longitude, latitude);
+                    if (m_mapMarkerItem.size() == 0) {
+                        getTourData(longitude, latitude);
+                    }
                 } else {
                     Toast.makeText(this,"위치를 찾을 수 없습니다.",Toast.LENGTH_LONG);
                 }
