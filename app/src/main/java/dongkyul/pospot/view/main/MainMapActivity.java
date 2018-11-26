@@ -69,7 +69,6 @@ public class MainMapActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
         init();
-        Log.e("log", "onCreate test !!");
     }
 
     @Override
@@ -139,10 +138,6 @@ public class MainMapActivity extends BaseActivity {
                 double longitude = gps.getLongitude();
 
                 if(latitude!=0.0&&longitude!=0.0) {
-                    Toast.makeText(
-                            getApplicationContext(),
-                            "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
-                            Toast.LENGTH_LONG).show();
                     tMapView.setLocationPoint(longitude, latitude);
                     tMapView.setCenterPoint(longitude, latitude);
                     if (m_mapMarkerItem.size() == 0) {
@@ -187,7 +182,8 @@ public class MainMapActivity extends BaseActivity {
 
                     if (MarkerID.contains("mymarker")) {
                         Intent intent = new Intent(MainMapActivity.this, PhotoMarkerViewActivity.class);
-//                        intent.putExtra("MarkerID",MarkerID);
+                        intent.putExtra("lat",markeritem.latitude);
+                        intent.putExtra("lon",markeritem.longitude);
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(MainMapActivity.this, MarkerClickedActivity.class);
@@ -203,10 +199,6 @@ public class MainMapActivity extends BaseActivity {
             @Override
             public void onLongPressEvent(ArrayList markerlist,ArrayList poilist, TMapPoint point) {
                 if(markerlist.isEmpty()) {
-                    Toast.makeText(
-                            getApplicationContext(),
-                            "앨범 등록을 위한 위치 선택 완료!\n"+point.getLatitude()+"\n"+point.getLongitude()+"\n",
-                            Toast.LENGTH_LONG).show();
                     addPhotoMarker(point.getLatitude(), point.getLongitude());
                 }
             }
