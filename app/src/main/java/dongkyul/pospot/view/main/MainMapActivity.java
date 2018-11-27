@@ -205,7 +205,7 @@ public class MainMapActivity extends BaseActivity {
         });
     }
 
-    public void showMarkerPoint() { //attraction 배열에 관광지목록만 따로 추가하는 역할도 함
+    public void showMarkerPoint() { // attraction 배열에 관광지목록만 따로 추가하는 역할도 함
         for(int i=0; i < m_mapMarkerItem.size(); i++) {
             TMapPoint point = m_mapMarkerItem.get(i).getTMapPoint();
             TMapMarkerItem item1 = new TMapMarkerItem();
@@ -294,7 +294,7 @@ public class MainMapActivity extends BaseActivity {
                     }
                     showMarkerPoint();
 
-                    //인스타 태그 수 표시창으로 이동
+                    // 인스타 태그 수 표시창으로 이동
                     recommendButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -322,8 +322,6 @@ public class MainMapActivity extends BaseActivity {
         super.onClick(v);
         switch (v.getId()){
             case R.id.btnMyLocation:
-                // to-be
-                // 관광 데이터 있는데 한번 더 누르면 뜨는 오류 해결하기
                 loadPosition();
                 break;
         }
@@ -357,9 +355,14 @@ public class MainMapActivity extends BaseActivity {
     }
 
     public void showPhotoMarker() {
-        // to PhotoMarkerDB 들 뽑아서 -> 이미지로 마커 표시
         Realm realm = Realm.getDefaultInstance();
         RealmResults<PhotoMarkerDB> results = realm.where(PhotoMarkerDB.class).findAll();
+
+//        더미 데이터 날림
+//        realm.beginTransaction();
+//        results.deleteAllFromRealm();
+//        realm.commitTransaction();
+//        realm.close();
 
         int i=0;
         if(results != null) {
@@ -377,7 +380,8 @@ public class MainMapActivity extends BaseActivity {
                 if(titleIndex < 0) {
                     titleIndex = 0;
                 }
-                byte[] titleByte = photoList.get(titleIndex);
+                byte[] titleByte = photoList.get(titleIndex); // error
+
                 Bitmap titleBitmap = BitmapFactory.decodeByteArray(titleByte, 0, titleByte.length);
                 item1.setIcon(titleBitmap);
                 item1.setPosition(0.5f, 1.0f);
