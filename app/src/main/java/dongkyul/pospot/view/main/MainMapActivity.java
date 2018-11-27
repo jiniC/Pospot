@@ -13,7 +13,9 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,7 +43,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainMapActivity extends BaseActivity {
     public TMapView tMapView;
-    public Button btnSet;
+    public ToggleButton btnSet;
     public Button myLocationButton;
 
     private static int mMarkerID;
@@ -76,7 +78,7 @@ public class MainMapActivity extends BaseActivity {
         super.init();
         ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.layout);
         tMapView = (TMapView)findViewById(R.id.tmapView);
-        btnSet = (Button) findViewById(R.id.btnSet);
+        btnSet = (ToggleButton) findViewById(R.id.btnSet);
         myLocationButton = (Button) findViewById(R.id.btnMyLocation);
         myLocationButton.setOnClickListener(this);
         recommendButton = (Button)findViewById(R.id.btnRecommend);
@@ -92,41 +94,26 @@ public class MainMapActivity extends BaseActivity {
                 Toast.makeText(getApplicationContext(),"위치 정보 로드 권한이 없습니다", Toast.LENGTH_LONG);
             }
         };
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PermissionUtils.checkLocationPermission(this, locationPermissionListener);
-        }else{
+        } else {
             loadPosition();
         }
 
-        // getZoomLevel
-        Thread t = new Thread(new Runnable() {
+        btnSet.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void run() {
-                int previousZoomlevel=tMapView.getZoomLevel();
-                int nowZoomlevel;
-                double previousPosition = tMapView.getCenterPointX();
-                double nowPosition = tMapView.getCenterPointX();
-                while(true){
-                    try {
-                        Thread.sleep(1000);
-                        nowZoomlevel = tMapView.getZoomLevel();
-                        if(previousZoomlevel!=nowZoomlevel||previousPosition!=nowPosition){
-                            Thread.sleep(1000);
-                            if(previousZoomlevel==nowZoomlevel&&previousPosition==nowPosition) {
-                                // to-be
-                                // 줌 레벨에 따라 세 단계 정도로 나눠서 데이터 받아오기 & 위치 변경에 따라서만 데이터 받아오기
-                            }
-                        }
-                    }
+            public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
+                if(isChecked) {
+                    showPhotoMarker();
+                } else {
 
-                    catch(Exception e){
-
-                    }
+                    removePhotoMarker();
                 }
             }
         });
 
-        showPhotoMarker();
+        setPhotoMarker();
     }
 
     public void loadPosition(){
@@ -354,7 +341,7 @@ public class MainMapActivity extends BaseActivity {
         alertDialog.show();
     }
 
-    public void showPhotoMarker() {
+    public void setPhotoMarker() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<PhotoMarkerDB> results = realm.where(PhotoMarkerDB.class).findAll();
 
@@ -397,5 +384,26 @@ public class MainMapActivity extends BaseActivity {
         }
 
         realm.close();
+    }
+
+    public void showPhotoMarker() {
+        // m_mapPhotoMarkerItem.size(), visible, hide. . .
+        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem));
+        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem.size()));
+//        for (int i = 0; m_mapPhotoMarkerItem.size(); i++) {
+//        }
+        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).VISIBLE);
+        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).VISIBLE);
+    }
+
+    public void removePhotoMarker() {
+        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).HIDDEN);
+        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).HIDDEN);
+        // m_mapPhotoMarkerItem 보이지 않게
+        Log.e("removePhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem));
+        for(TMapMarkerItem PhotoMarkerItem:m_mapPhotoMarkerItem) {
+            PhotoMarkerItem.setVisible(PhotoMarkerItem.HIDDEN);
+            Log.e("remove for :: ",PhotoMarkerItem.getID());
+        }
     }
 }

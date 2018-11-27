@@ -15,25 +15,16 @@
         tools:layout_editor_absoluteX="0dp"
         tools:ignore="MissingConstraints">
 
-        <Button
+        <ToggleButton
             android:id="@+id/btnSet"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="설정"
+            android:textOn="포토마커 보기"
+            android:textOff="포토마커 숨기기"
+            android:checked="true"
             tools:layout_editor_absoluteX="64dp"
             tools:layout_editor_absoluteY="114dp" />
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text=""
-            tools:layout_editor_absoluteX="55dp"
-            tools:layout_editor_absoluteY="2dp" />
 
         <Button
             android:id="@+id/btnMyTour"
