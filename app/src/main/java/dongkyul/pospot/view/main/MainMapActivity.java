@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -54,6 +55,8 @@ public class MainMapActivity extends BaseActivity {
     private ArrayList<TMapMarkerItem> m_mapPhotoMarkerItem = new ArrayList<TMapMarkerItem>();
     public float touchX;
     public float touchY;
+    public static Boolean move;
+    Boolean multiTouch;
 
     String tourItemContenttypeid;
     float tourItemMapLat;
@@ -87,6 +90,7 @@ public class MainMapActivity extends BaseActivity {
         btnMyTour = (Button)findViewById(R.id.btnMyTour);
         touchX=-1;
         touchY=-1;
+        move=false;
         addMapView();
         PermissionListener locationPermissionListener = new PermissionListener() {
             @Override
@@ -134,6 +138,15 @@ public class MainMapActivity extends BaseActivity {
         });
 
         setPhotoMarker();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(ev.getPointerCount()>1)
+            multiTouch=true;
+        else
+            multiTouch=false;
+        return super.dispatchTouchEvent(ev);
     }
 
     public void loadPosition(){
@@ -184,7 +197,7 @@ public class MainMapActivity extends BaseActivity {
 
             @Override
             public boolean onPressUpEvent(ArrayList<TMapMarkerItem> arrayMapMarkerItem, ArrayList<TMapPOIItem> arrayMapPOIItem, TMapPoint mapPoint, PointF pointF) {
-                boolean move=true;
+                move=true;
                 if(-8<pointF.x-touchX&&touchX-pointF.x<8&&pointF.y-touchY<8&&-8<pointF.y-touchY)
                     move=false;
                 if(!arrayMapMarkerItem.isEmpty()&!move) {
@@ -206,7 +219,17 @@ public class MainMapActivity extends BaseActivity {
                 return false;
             }
         });
+        tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
+            @Override
+            public void onLongPressEvent(ArrayList markerlist,ArrayList poilist, TMapPoint point) {
+                if(markerlist.isEmpty()&&!multiTouch) {
+                    addPhotoMarker(point.getLatitude(), point.getLongitude());
+                }
+            }
+        });
     }
+
+
 
     public void showMarkerPoint() { // attraction 배열에 관광지목록만 따로 추가하는 역할도 함
         for(int i=0; i < m_mapMarkerItem.size(); i++) {
