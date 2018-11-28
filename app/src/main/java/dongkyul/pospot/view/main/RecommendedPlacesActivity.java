@@ -85,6 +85,7 @@ public class RecommendedPlacesActivity extends BaseActivity {
                             double lon = tourList.response.body.items.item.get(i).mapx; // longitude
                             if(tourItemContenttypeid==12) { //관광지이면
                                 attractions.add(new Attraction(tourList.response.body.items.item.get(i).title,lat,lon));
+                                Log.e("s",tourList.response.body.items.item.get(i).title);
                             }
                         }
                     }

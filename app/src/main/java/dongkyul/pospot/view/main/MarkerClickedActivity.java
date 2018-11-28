@@ -1,5 +1,6 @@
 package dongkyul.pospot.view.main;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import dongkyul.pospot.R;
 import dongkyul.pospot.view.common.BaseActivity;
@@ -37,6 +39,8 @@ public class MarkerClickedActivity extends BaseActivity {
     List<String> urls;
     static List<Bitmap> mPhotoList_img;
     int urlIndex=0;
+    public ProgressDialog mProgressDialog;
+    public static Boolean complete;
 
 
     @Override
@@ -49,6 +53,7 @@ public class MarkerClickedActivity extends BaseActivity {
     @Override
     public void init() {
         super.init();
+        complete=false;
         setContentView(R.layout.activity_insta_image);
         urls = new ArrayList<>();
         mPhotoList_img = new ArrayList<>();
@@ -59,8 +64,27 @@ public class MarkerClickedActivity extends BaseActivity {
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(MarkerClickedActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         LinearLayout filterMenu = (LinearLayout)findViewById(R.id.filterMenu);
-        myAdapter = new FilterListRecyclerAdapter(MarkerClickedActivity.this, mPhotoList_img);
+        showProgressDialog();
+        myAdapter = new FilterListRecyclerAdapter(MarkerClickedActivity.this, mPhotoList_img, mProgressDialog);
         mRecyclerView.setAdapter(myAdapter);
+
+        /*
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(complete==false){
+                    try {
+                        Thread.sleep(1000);
+                    }catch(Exception e){
+                    }
+                    Log.e("S","a");
+                }
+                if(complete==true)
+                    hideProgressDialog();
+            }
+        });
+        t.run();
+*/
         requestImages();
     }
 
@@ -72,7 +96,7 @@ public class MarkerClickedActivity extends BaseActivity {
         }
     }
 
-    public void requestImages(){ //API로부터 이미지 받아오기
+    public void requestImages(){ //API로부터 이미지 링크 받아오기
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(getPhotosInterface.BaseURL)
@@ -94,7 +118,6 @@ public class MarkerClickedActivity extends BaseActivity {
                         urls.add(url);
                     }
                     getImages();
-
                 }
             }
             @Override
@@ -110,8 +133,12 @@ public class MarkerClickedActivity extends BaseActivity {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-        OkHttpClient client = new OkHttpClient();
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        OkHttpClient.Builder client = new OkHttpClient.Builder();
+        client.connectTimeout(15, TimeUnit.SECONDS);
+        client.readTimeout(15,TimeUnit.SECONDS);
+        client.writeTimeout(15,TimeUnit.SECONDS);
+        OkHttpClient client1 = client.build();
+        client1.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
                 Log.e("error",e.toString());
@@ -130,6 +157,7 @@ public class MarkerClickedActivity extends BaseActivity {
                     @Override
                     public void run() {
                         myAdapter.notifyDataSetChanged();
+
                     }
                 });
             }
@@ -138,5 +166,23 @@ public class MarkerClickedActivity extends BaseActivity {
 
     public static Bitmap getBitmapFilter(int position){
         return mPhotoList_img.get(position);
+    }
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("로딩중...");
+            mProgressDialog.setIndeterminate(true);
+        }
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+    public static void endLoading(){
+        complete=true;
     }
 }
