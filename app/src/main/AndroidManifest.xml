@@ -34,6 +34,7 @@
         <activity android:name=".view.main.RecommendedPlacesActivity" />
         <activity android:name=".view.main.PhotoMarkerActivity" />
         <activity android:name=".view.main.FilteredCameraActivity"></activity>
+        <activity android:name=".view.main.MyTourActivity"></activity>
     </application>
 
 </manifest>

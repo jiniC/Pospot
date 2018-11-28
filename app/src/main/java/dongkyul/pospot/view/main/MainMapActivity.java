@@ -45,6 +45,7 @@ public class MainMapActivity extends BaseActivity {
     public TMapView tMapView;
     public ToggleButton btnSet;
     public Button myLocationButton;
+    public Button btnMyTour;
 
     private static int mMarkerID;
     private static int mPhotoMarkerID;
@@ -82,6 +83,7 @@ public class MainMapActivity extends BaseActivity {
         myLocationButton = (Button) findViewById(R.id.btnMyLocation);
         myLocationButton.setOnClickListener(this);
         recommendButton = (Button)findViewById(R.id.btnRecommend);
+        btnMyTour = (Button)findViewById(R.id.btnMyTour);
         addMapView();
         PermissionListener locationPermissionListener = new PermissionListener() {
             @Override
@@ -110,6 +112,21 @@ public class MainMapActivity extends BaseActivity {
 
                     removePhotoMarker();
                 }
+            }
+        });
+
+        btnMyTour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(MainMapActivity.this, MyTourActivity.class);
+                int zoomLevel = tMapView.getZoomLevel();
+                TMapPoint centerPoint=tMapView.getCenterPoint();
+                centerLat = centerPoint.getLatitude();
+                centerLon = centerPoint.getLongitude();
+                intent.putExtra("lat", centerLat);
+                intent.putExtra("lon", centerLon);
+                intent.putExtra("zoomLevel", zoomLevel);
+                startActivity(intent);
             }
         });
 
@@ -394,11 +411,15 @@ public class MainMapActivity extends BaseActivity {
 //        }
         m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).VISIBLE);
         m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).VISIBLE);
+//        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).VISIBLE);
+//        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).VISIBLE);
     }
 
     public void removePhotoMarker() {
-        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).HIDDEN);
-        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).HIDDEN);
+        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).GONE);
+        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).GONE);
+//        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).HIDDEN);
+//        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).HIDDEN);
         // m_mapPhotoMarkerItem 보이지 않게
         Log.e("removePhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem));
         for(TMapMarkerItem PhotoMarkerItem:m_mapPhotoMarkerItem) {
