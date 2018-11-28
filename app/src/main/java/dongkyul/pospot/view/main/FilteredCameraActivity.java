@@ -501,7 +501,7 @@ public class FilteredCameraActivity extends BaseActivity {
             // Write to SD Card
             try {
                 File sdCard = Environment.getExternalStorageDirectory();
-                File dir = new File(sdCard.getAbsolutePath() + "/cammate");
+                File dir = new File(sdCard.getAbsolutePath() + "/pospot");
                 dir.mkdirs();
 
                 String fileName = String.format("%d.jpg", System.currentTimeMillis());
