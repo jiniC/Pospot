@@ -1,6 +1,5 @@
 package dongkyul.pospot.view.main;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,14 +17,12 @@ import dongkyul.pospot.R;
 public class FilterListRecyclerAdapter extends RecyclerView.Adapter<FilterListRecyclerAdapter.FilterListViewHolder> {
 
     private Context mContext;
-    private ProgressDialog mProgress;
 
     List<Bitmap> mPhotoList_img = new ArrayList<Bitmap>();
 
-    public FilterListRecyclerAdapter(Context mContext, List<Bitmap> mPhotoList_img, ProgressDialog mProgressDialog) {
+    public FilterListRecyclerAdapter(Context mContext, List<Bitmap> mPhotoList_img) {
         this.mContext = mContext;
         this.mPhotoList_img = mPhotoList_img;
-        this.mProgress=mProgressDialog;
     }
 
     @Override
@@ -38,12 +35,6 @@ public class FilterListRecyclerAdapter extends RecyclerView.Adapter<FilterListRe
     @Override
     public void onBindViewHolder(FilterListViewHolder holder, final int position) {
         holder.mPhoto.setImageBitmap(mPhotoList_img.get(position));
-        if(mPhotoList_img.size()<3){
-            MarkerClickedActivity.endLoading();
-        }
-        else if(position==2) {
-            MarkerClickedActivity.endLoading();
-        }
         holder.mPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

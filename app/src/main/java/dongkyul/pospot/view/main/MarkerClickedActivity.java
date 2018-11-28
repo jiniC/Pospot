@@ -40,7 +40,6 @@ public class MarkerClickedActivity extends BaseActivity {
     static List<Bitmap> mPhotoList_img;
     int urlIndex=0;
     public ProgressDialog mProgressDialog;
-    public static Boolean complete;
 
 
     @Override
@@ -53,7 +52,6 @@ public class MarkerClickedActivity extends BaseActivity {
     @Override
     public void init() {
         super.init();
-        complete=false;
         setContentView(R.layout.activity_insta_image);
         urls = new ArrayList<>();
         mPhotoList_img = new ArrayList<>();
@@ -64,27 +62,8 @@ public class MarkerClickedActivity extends BaseActivity {
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(MarkerClickedActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         LinearLayout filterMenu = (LinearLayout)findViewById(R.id.filterMenu);
-        showProgressDialog();
-        myAdapter = new FilterListRecyclerAdapter(MarkerClickedActivity.this, mPhotoList_img, mProgressDialog);
+        myAdapter = new FilterListRecyclerAdapter(MarkerClickedActivity.this, mPhotoList_img);
         mRecyclerView.setAdapter(myAdapter);
-
-        /*
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(complete==false){
-                    try {
-                        Thread.sleep(1000);
-                    }catch(Exception e){
-                    }
-                    Log.e("S","a");
-                }
-                if(complete==true)
-                    hideProgressDialog();
-            }
-        });
-        t.run();
-*/
         requestImages();
     }
 
@@ -108,8 +87,12 @@ public class MarkerClickedActivity extends BaseActivity {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 PhotoResponseContainer container = gson.fromJson(response.body(),PhotoResponseContainer.class);
-                if(container.imgurls==null)
+                if(container.imgurls==null) {
+                    TextView noResult = (TextView)findViewById(R.id.noResultTab);
+                    noResult.setVisibility(View.VISIBLE);
+                    noResult.setText("\""+markerName+"\" 태그의 Instagram 검색 결과가 존재하지 않습니다");
                     return;
+                }
                 String toConcat=container.imgurls.substring(1,container.imgurls.length()-1).replace("\"","");
                 String[] rst=toConcat.split("\\,");
 
@@ -117,6 +100,7 @@ public class MarkerClickedActivity extends BaseActivity {
                     for (String url : rst) {
                         urls.add(url);
                     }
+                    showProgressDialog();
                     getImages();
                 }
             }
@@ -128,7 +112,8 @@ public class MarkerClickedActivity extends BaseActivity {
     }
 
     public void getImages(){ //onResponse에 따라 재귀적으로 url로부터 이미지 호출
-        String url = urls.get(urlIndex);
+        showProgressDialog();
+        final String url = urls.get(urlIndex);
         urlIndex++;
         Request request = new Request.Builder()
                 .url(url)
@@ -157,7 +142,9 @@ public class MarkerClickedActivity extends BaseActivity {
                     @Override
                     public void run() {
                         myAdapter.notifyDataSetChanged();
-
+                        if((urls.size()<5&urlIndex==0)||urlIndex==4){
+                            hideProgressDialog();
+                        }
                     }
                 });
             }
@@ -173,16 +160,18 @@ public class MarkerClickedActivity extends BaseActivity {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage("로딩중...");
             mProgressDialog.setIndeterminate(true);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mProgressDialog.show();
+                }
+            });
         }
-        mProgressDialog.show();
     }
 
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
-    }
-    public static void endLoading(){
-        complete=true;
     }
 }
