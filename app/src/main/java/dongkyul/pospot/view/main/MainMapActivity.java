@@ -109,18 +109,18 @@ public class MainMapActivity extends BaseActivity {
         } else {
             loadPosition();
         }
-
-        btnSet.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
-                if(isChecked) {
-                    showPhotoMarker();
-                } else {
-
-                    removePhotoMarker();
-                }
-            }
-        });
+//
+//        btnSet.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
+//                if(isChecked) {
+//                    showPhotoMarker();
+//                } else {
+//
+//                    removePhotoMarker();
+//                }
+//            }
+//        });
 
         btnMyTour.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -423,29 +423,29 @@ public class MainMapActivity extends BaseActivity {
 
         realm.close();
     }
-
-    public void showPhotoMarker() {
-        // m_mapPhotoMarkerItem.size(), visible, hide. . .
-        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem));
-        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem.size()));
-//        for (int i = 0; m_mapPhotoMarkerItem.size(); i++) {
-//        }
-        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).VISIBLE);
-        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).VISIBLE);
+//
+//    public void showPhotoMarker() {
+//        // m_mapPhotoMarkerItem.size(), visible, hide. . .
+//        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem));
+//        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem.size()));
+////        for (int i = 0; m_mapPhotoMarkerItem.size(); i++) {
+////        }
 //        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).VISIBLE);
 //        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).VISIBLE);
-    }
-
-    public void removePhotoMarker() {
-        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).GONE);
-        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).GONE);
-//        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).HIDDEN);
-//        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).HIDDEN);
-        // m_mapPhotoMarkerItem 보이지 않게
-        Log.e("removePhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem));
-        for(TMapMarkerItem PhotoMarkerItem:m_mapPhotoMarkerItem) {
-            PhotoMarkerItem.setVisible(PhotoMarkerItem.HIDDEN);
-            Log.e("remove for :: ",PhotoMarkerItem.getID());
-        }
-    }
+////        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).VISIBLE);
+////        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).VISIBLE);
+//    }
+//
+//    public void removePhotoMarker() {
+//        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).GONE);
+//        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).GONE);
+////        m_mapPhotoMarkerItem.get(0).setVisible(m_mapPhotoMarkerItem.get(0).HIDDEN);
+////        m_mapPhotoMarkerItem.get(1).setVisible(m_mapPhotoMarkerItem.get(1).HIDDEN);
+//        // m_mapPhotoMarkerItem 보이지 않게
+//        Log.e("removePhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem));
+//        for(TMapMarkerItem PhotoMarkerItem:m_mapPhotoMarkerItem) {
+//            PhotoMarkerItem.setVisible(PhotoMarkerItem.HIDDEN);
+//            Log.e("remove for :: ",PhotoMarkerItem.getID());
+//        }
+//    }
 }
