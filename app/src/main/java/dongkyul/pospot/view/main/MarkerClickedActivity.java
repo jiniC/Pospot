@@ -41,7 +41,6 @@ public class MarkerClickedActivity extends BaseActivity {
     int urlIndex=0;
     public ProgressDialog mProgressDialog;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -46,13 +46,14 @@ public class MainMapActivity extends BaseActivity {
     public ToggleButton btnSet;
     public Button myLocationButton;
     public Button btnMyTour;
-
     private static int mMarkerID;
     private static int mPhotoMarkerID;
     private ArrayList<String> mArrayMarkerID = new ArrayList<String>();
     private ArrayList<String> mPhotoArrayMarkerID = new ArrayList<String>();
     private ArrayList<TMapMarkerItem> m_mapMarkerItem = new ArrayList<TMapMarkerItem>();
     private ArrayList<TMapMarkerItem> m_mapPhotoMarkerItem = new ArrayList<TMapMarkerItem>();
+    public float touchX;
+    public float touchY;
 
     String tourItemContenttypeid;
     float tourItemMapLat;
@@ -84,6 +85,8 @@ public class MainMapActivity extends BaseActivity {
         myLocationButton.setOnClickListener(this);
         recommendButton = (Button)findViewById(R.id.btnRecommend);
         btnMyTour = (Button)findViewById(R.id.btnMyTour);
+        touchX=-1;
+        touchY=-1;
         addMapView();
         PermissionListener locationPermissionListener = new PermissionListener() {
             @Override
@@ -174,12 +177,17 @@ public class MainMapActivity extends BaseActivity {
         tMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback() {
             @Override
             public boolean onPressEvent(ArrayList arrayList, ArrayList arrayList1, TMapPoint tMapPoint, PointF pointF) {
+                touchX=pointF.x;
+                touchY=pointF.y;
                 return false;
             }
 
             @Override
             public boolean onPressUpEvent(ArrayList<TMapMarkerItem> arrayMapMarkerItem, ArrayList<TMapPOIItem> arrayMapPOIItem, TMapPoint mapPoint, PointF pointF) {
-                if(!arrayMapMarkerItem.isEmpty()) {
+                boolean move=true;
+                if(-8<pointF.x-touchX&&touchX-pointF.x<8&&pointF.y-touchY<8&&-8<pointF.y-touchY)
+                    move=false;
+                if(!arrayMapMarkerItem.isEmpty()&!move) {
                     String MarkerID = arrayMapMarkerItem.get(0).getID();
                     TMapMarkerItem markeritem = tMapView.getMarkerItemFromID(String.valueOf(MarkerID));
                     String MarkerName = markeritem.getName();
@@ -198,22 +206,12 @@ public class MainMapActivity extends BaseActivity {
                 return false;
             }
         });
-
-        tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
-            @Override
-            public void onLongPressEvent(ArrayList markerlist,ArrayList poilist, TMapPoint point) {
-                if(markerlist.isEmpty()) {
-                    addPhotoMarker(point.getLatitude(), point.getLongitude());
-                }
-            }
-        });
     }
 
     public void showMarkerPoint() { // attraction 배열에 관광지목록만 따로 추가하는 역할도 함
         for(int i=0; i < m_mapMarkerItem.size(); i++) {
             TMapPoint point = m_mapMarkerItem.get(i).getTMapPoint();
             TMapMarkerItem item1 = new TMapMarkerItem();
-
             int contenttypeid = Integer.parseInt(m_mapMarkerItem.get(i).getCalloutSubTitle());
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker);
             switch (contenttypeid) {
