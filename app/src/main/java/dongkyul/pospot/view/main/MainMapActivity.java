@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -45,7 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainMapActivity extends BaseActivity {
     public TMapView tMapView;
     public ToggleButton btnSet;
-    public Button myLocationButton;
+    public ImageButton myLocationButton;
     public Button btnMyTour;
     private static int mMarkerID;
     private static int mPhotoMarkerID;
@@ -84,7 +85,7 @@ public class MainMapActivity extends BaseActivity {
         ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.layout);
         tMapView = (TMapView)findViewById(R.id.tmapView);
         btnSet = (ToggleButton) findViewById(R.id.btnSet);
-        myLocationButton = (Button) findViewById(R.id.btnMyLocation);
+        myLocationButton = (ImageButton) findViewById(R.id.btnMyLocation);
         myLocationButton.setOnClickListener(this);
         recommendButton = (Button)findViewById(R.id.btnRecommend);
         btnMyTour = (Button)findViewById(R.id.btnMyTour);
@@ -149,6 +150,7 @@ public class MainMapActivity extends BaseActivity {
     }
 
     public void loadPosition(){
+        Log.e("loadPosition","loadPosition");
         try {
             gps = new GpsInfo(MainMapActivity.this);
 

@@ -22,7 +22,8 @@
             android:layout_weight="1"
             android:text="사진으로 저장"
             tools:layout_editor_absoluteX="251dp"
-            tools:layout_editor_absoluteY="4dp" />
+            tools:layout_editor_absoluteY="4dp"
+            android:background="@null" />
 
         <Button
             android:id="@+id/btnSend"
@@ -31,7 +32,8 @@
             android:layout_weight="1"
             android:text="보내기"
             tools:layout_editor_absoluteX="324dp"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="0dp"
+            android:background="@null" />
 
     </LinearLayout>
 
