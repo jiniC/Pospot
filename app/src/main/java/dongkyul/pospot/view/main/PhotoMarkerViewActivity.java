@@ -25,6 +25,7 @@ public class PhotoMarkerViewActivity extends BaseActivity {
     PhotoMarkerViewAdapter myAdapter;
     List<Bitmap> mPhotoList_img;
     RealmList<byte[]> mPhotoList_byte;
+    TextView nameTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class PhotoMarkerViewActivity extends BaseActivity {
     @Override
     public void init() {
         super.init();
+        nameTab = (TextView)findViewById(R.id.markerNameTab);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -49,6 +51,8 @@ public class PhotoMarkerViewActivity extends BaseActivity {
                 .and()
                 .equalTo("lon", photoMarkerLon)
                 .findFirst();
+
+        nameTab.setText(clickPhotoMarker.getTitle());
 
         mPhotoList_img = new ArrayList<Bitmap>();
         mPhotoList_byte = new RealmList<byte[]>();
