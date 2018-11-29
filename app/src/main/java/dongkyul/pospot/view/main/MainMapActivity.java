@@ -93,6 +93,9 @@ public class MainMapActivity extends BaseActivity {
         touchY=-1;
         move=false;
         addMapView();
+        if (m_mapMarkerItem.size() == 0) {
+            getTourData(126.9828357, 37.5664558);
+        }
         PermissionListener locationPermissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -161,9 +164,6 @@ public class MainMapActivity extends BaseActivity {
                 if(latitude!=0.0&&longitude!=0.0) {
                     tMapView.setLocationPoint(longitude, latitude);
                     tMapView.setCenterPoint(longitude, latitude);
-                    if (m_mapMarkerItem.size() == 0) {
-                        getTourData(longitude, latitude);
-                    }
                 } else {
                     Toast.makeText(this,"위치를 찾을 수 없습니다.",Toast.LENGTH_LONG);
                 }
@@ -229,8 +229,6 @@ public class MainMapActivity extends BaseActivity {
             }
         });
     }
-
-
 
     public void showMarkerPoint() { // attraction 배열에 관광지목록만 따로 추가하는 역할도 함
         for(int i=0; i < m_mapMarkerItem.size(); i++) {
