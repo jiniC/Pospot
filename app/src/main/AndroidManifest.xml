@@ -13,9 +13,9 @@
     <application
         android:name=".view.common.MainApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/pospot_ico"
+        android:icon="@mipmap/pospot_ico_2"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/pospot_ico"
+        android:roundIcon="@mipmap/pospot_ico_2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".view.main.MainMapActivity">
