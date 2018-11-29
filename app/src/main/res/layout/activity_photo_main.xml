@@ -17,14 +17,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="홈" />
+            android:text="홈"
+            android:background="@null" />
 
         <Button
             android:id="@+id/btnMarkerCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="포토 마커 생성" />
+            android:text="포토 마커 생성"
+            android:background="@null"/>
     </LinearLayout>
 
     <LinearLayout

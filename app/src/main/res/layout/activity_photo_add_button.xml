@@ -5,11 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <Button
+    <ImageButton
         android:id="@+id/btnAddPhoto"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="5dp"
         android:scaleType="centerCrop"
-        android:text="사진 추가" />
+        android:text="사진 추가"
+        android:src="@drawable/btn_plus_photo"
+        android:padding="50sp"
+        android:background="@null" />
 </LinearLayout>
