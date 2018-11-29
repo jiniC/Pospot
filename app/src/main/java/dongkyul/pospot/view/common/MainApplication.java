@@ -13,7 +13,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Realm.init(getApplicationContext());
-        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").migration(new PhotoMarkerDBMigration()).build();
+        RealmConfiguration config = new RealmConfiguration.Builder().name("PhotoToAdd").deleteRealmIfMigrationNeeded().build();
         Realm.setDefaultConfiguration(config);
     }
     @Override

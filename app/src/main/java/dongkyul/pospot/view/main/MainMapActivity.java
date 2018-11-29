@@ -421,31 +421,19 @@ public class MainMapActivity extends BaseActivity {
                 i = i + 1;
             }
         }
-
         realm.close();
     }
 
     public void showPhotoMarker() {
-        // m_mapPhotoMarkerItem.size(), visible, hide. . .
-//        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem.size()));
-        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem));
-//        m_mapPhotoMarkerItem.get(0).setVisible(2);
-//        m_mapPhotoMarkerItem.get(1).setVisible(2);
-        m_mapPhotoMarkerItem.get(0).setVisible(TMapMarkerItem.VISIBLE);
-        m_mapPhotoMarkerItem.get(1).setVisible(TMapMarkerItem.VISIBLE);
-        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem.get(0).getVisible()));
+        setPhotoMarker();
     }
 
     public void removePhotoMarker() {
-        // m_mapPhotoMarkerItem 보이지 않게
-//        m_mapPhotoMarkerItem.get(0).setVisible(1);
-        m_mapPhotoMarkerItem.get(0).setVisible(TMapMarkerItem.GONE);
-        m_mapPhotoMarkerItem.get(1).setVisible(TMapMarkerItem.GONE);
-        Log.e("showPhotoMarker :: ", String.valueOf(m_mapPhotoMarkerItem.get(0).getVisible()));
-
-//        for(TMapMarkerItem PhotoMarkerItem:m_mapPhotoMarkerItem) {
-//            PhotoMarkerItem.setVisible(PhotoMarkerItem.HIDDEN);
-//            Log.e("remove for :: ",PhotoMarkerItem.getID());
-//        }
+        for (int i=0; i<mPhotoArrayMarkerID.size(); i++) {
+            String markerId = mPhotoArrayMarkerID.get(i);
+            if(markerId.contains("mymarker")) {
+                tMapView.removeMarkerItem(markerId);
+            }
+        }
     }
 }
