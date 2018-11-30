@@ -50,6 +50,7 @@ public class PhotoMarkerAdapter extends RecyclerView.Adapter<PhotoMarkerAdapter.
                 clickPhotoMarker.setTitleIndex(position);
                 realm.commitTransaction();
                 realm.close();
+                Toast.makeText(mContext, "대표 사진으로 설정됩니다.", Toast.LENGTH_LONG).show();
             }
         });
     }

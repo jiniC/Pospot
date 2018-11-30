@@ -148,12 +148,12 @@ public class MyTourActivity extends BaseActivity {
         tMapView.setSKTMapApiKey( "fac21bdf-e297-4eaa-b2a0-fc02db2f6f1f");
         tMapView.setLocationPoint(lon,lat);
         tMapView.setCenterPoint(lon,lat);
-        tMapView.setIconVisibility(true);
+        tMapView.setIconVisibility(false);
         tMapView.setZoomLevel(zoomLevel);
         tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
         tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
-        tMapView.setTrackingMode(true);
-        tMapView.setSightVisible(true);
+        tMapView.setTrackingMode(false);
+        tMapView.setSightVisible(false);
 
         tMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback() {
             @Override
