@@ -5,17 +5,19 @@
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
 
-    <string name="slide_1_title">Hello Food!</string>
-    <string name="slide_1_desc">The easiest way to order food from your favourite restaurant!</string>
+    <string name="slide_1_title">투어마커</string>
+    <string name="slide_1_desc">한국관광공사의 관광정보가 종류별로 한눈에!</string>
+    <string name="slide_1_desc2">추천버튼클릭으로 SNS 핫스팟 확인!</string>
 
-    <string name="slide_2_title">Movie Tickets</string>
-    <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
+    <string name="slide_2_title">투어마커를 클릭하면</string>
+    <string name="slide_2_desc">인스타그램에 올라온 사진 리스트가!</string>
+    <string name="slide_2_desc2">인스타그램 사진이 맘에들었다면 똑같이 찍어보세요!</string>
 
-    <string name="slide_3_title">Great Discounts</string>
-    <string name="slide_3_desc">Best discounts on every single service we offer!</string>
+    <string name="slide_3_title">지도위를 길게 클릭하면</string>
+    <string name="slide_3_desc">내가 다녀온 곳에 포토마커를 등록해보세요!</string>
 
-    <string name="slide_4_title">World Travel</string>
-    <string name="slide_4_desc">Book tickets of any transportation and travel the world!</string>
+    <string name="slide_4_title">MY투어를 클릭하면</string>
+    <string name="slide_4_desc">내가만든 여행지도가 앨범으로 저장!</string>
 
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
