@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -126,6 +127,11 @@ public class RecommendedPlacesActivity extends BaseActivity {
     }
 
     public void requestApi(){
+        if(attractionNames.size()<tagNumIndex+5) {
+            TextView loadingTab = (TextView)findViewById(R.id.loding);
+            loadingTab.setText("반경 5km내에 여행 정보가 없습니다");
+            return;
+        }
         Call<JsonObject> request = service.getTagNum(attractionNames.get(tagNumIndex),attractionNames.get(tagNumIndex+1),attractionNames.get(tagNumIndex+2),attractionNames.get(tagNumIndex+3),attractionNames.get(tagNumIndex+4));
         request.enqueue(new Callback<JsonObject>() {
             @Override

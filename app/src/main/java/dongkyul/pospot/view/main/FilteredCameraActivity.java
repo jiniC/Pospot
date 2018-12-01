@@ -33,13 +33,17 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.gun0912.tedpermission.PermissionListener;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import dongkyul.pospot.R;
+import dongkyul.pospot.utils.PermissionUtils;
 import dongkyul.pospot.view.common.BaseActivity;
 
 public class FilteredCameraActivity extends BaseActivity {
@@ -150,15 +154,22 @@ public class FilteredCameraActivity extends BaseActivity {
                     ;//이미 퍼미션을 가지고 있음
                 }
                 else {
-                    //퍼미션 요청
-                    ActivityCompat.requestPermissions( this,
-                            new String[]{Manifest.permission.CAMERA,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            PERMISSIONS_REQUEST_CODE);
+                    PermissionListener p = new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted() {
+                            init();
+                        }
+
+                        @Override
+                        public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                            Toast.makeText(FilteredCameraActivity.this, "카메라 사용이 허용되지 않으면 이 기능을 이용하실 수 없습니다",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    };
+                    PermissionUtils.checkCameraPermission(this,p);
                 }
             }
             else{
-                ;
             }
 
 
