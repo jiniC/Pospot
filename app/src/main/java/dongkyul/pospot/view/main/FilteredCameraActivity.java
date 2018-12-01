@@ -219,7 +219,7 @@ public class FilteredCameraActivity extends BaseActivity {
                 camera.startPreview();
 
             } catch (RuntimeException ex) {
-                Toast.makeText(ctx, "camera_not_found " + ex.getMessage().toString(),
+                Toast.makeText(ctx, "권한 설정이 필요합니다.",
                         Toast.LENGTH_LONG).show();
                 Log.d(TAG, "camera_not_found " + ex.getMessage().toString());
             }
