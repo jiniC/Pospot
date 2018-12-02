@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical|center_horizontal"
-            android:text="인스타그램에 등록된 이미지 클릭으로 사진촬영하기"
+            android:text="사진필터을 누르면 촬영화면으로 이동합니다."
             android:textColor="@android:color/darker_gray"
             android:textSize="13dp"
             app:layout_constraintEnd_toEndOf="parent"

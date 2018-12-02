@@ -13,6 +13,17 @@
         android:textColor="@android:color/black"
         android:textSize="18dp" />
 
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="포토마커 삭제하기"
+        android:gravity="center_vertical|center_horizontal"
+        android:background="@null"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="13dp" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
