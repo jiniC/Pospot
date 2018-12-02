@@ -84,10 +84,8 @@ public class RecommendedPlacesActivity extends BaseActivity {
                             int tourItemContenttypeid = tourList.response.body.items.item.get(i).contenttypeid;
                             double lat = tourList.response.body.items.item.get(i).mapy; // latitude
                             double lon = tourList.response.body.items.item.get(i).mapx; // longitude
-                            if(tourItemContenttypeid==12) { //관광지이면
-                                attractions.add(new Attraction(tourList.response.body.items.item.get(i).title,lat,lon));
-                                Log.e("s",tourList.response.body.items.item.get(i).title);
-                            }
+                            attractions.add(new Attraction(tourList.response.body.items.item.get(i).title,lat,lon));
+                            Log.e("s",tourList.response.body.items.item.get(i).title);
                         }
                     }
                     catch(Exception e){
@@ -153,6 +151,7 @@ public class RecommendedPlacesActivity extends BaseActivity {
                 else{
                     Log.e("S",Integer.toString(tagNums.size()));
                     recyclerAdapter.notifyDataSetChanged();
+                    // og.e("tagNames :: ", String.valueOf(tagNames));
                 }
             }
 

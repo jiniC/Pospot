@@ -36,7 +36,7 @@ public class AttractionsRecyclerAdapter extends RecyclerView.Adapter<Attractions
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.tagName.setText(tagNames.get(position));
-        holder.tagNum.setText(Integer.toString(tagNums.get(position)));
+        holder.tagNum.setText("#"+Integer.toString(tagNums.get(position)));
     }
 
     @Override
