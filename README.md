@@ -1,11 +1,13 @@
 # Pospot
 Pose + posting + spot = traveling app
 
-1. 개발 환경:	Android Studio
-2. Front-end: Java, Android
-3. Back-end: nodeJS
-4. DB: 
-5. 라이브러리: 
+- 개발 환경:	Android Studio
+- Front-end: Java, Android
+- Back-end: Django(Python3)
+- DB: Realm
+- 사용기술<br>
+Client: SK T map API, 한국관광공사 Tour API, Retrofit, Gson<br>
+Server: Azure Ubuntu VM, Selenium, Chromium
 
 <img src="https://github.com/jiniC/Pospot/blob/master/screenshot/pospot_0.png" width="800">
 
